@@ -1,0 +1,17 @@
+import React from 'react';
+import { View} from 'react-native';
+import styles from './spacer.style';
+
+
+interface iProps {
+    
+}
+
+const Spacer:React.FC<iProps> = ({}) => {
+  return (
+        <View style={styles.container}></View>
+  );
+}
+
+
+export default Spacer;

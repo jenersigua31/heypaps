@@ -1,0 +1,4 @@
+1. app loading, splash screen
+2. Cart screen break to small components
+3. Button component
+4. category products one row only
