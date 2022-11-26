@@ -3,7 +3,7 @@ import React from 'react';
 import { Screen } from '../../types/screen.types';
 import { CategoryList } from '../../widgets';
 
-interface iCategory {
+export interface iCategory {
     label: string,
     icon: string
 }

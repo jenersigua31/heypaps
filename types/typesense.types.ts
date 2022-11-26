@@ -14,5 +14,8 @@ export interface iTypeSenseSearchParams {
 export interface iTypeSenseResponse<T>{
     data: T[],
     page: number,
-    total: number
+    total: number,
+    facets?: {
+        [key : string]: string[]
+    }
 }

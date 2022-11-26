@@ -26,12 +26,25 @@ const useTypeSense = () => {
                 .collections(collection)
                 .documents()
                 .search(params)
-            .then((e) => { 
+            .then((e) => {  
+
+                let facets: {
+                    [key: string]: string[]
+                } = {};
+
+                e.facet_counts?.forEach( f => {
+                    facets = {
+                        ...facets,
+                        [f.field_name]: f.counts.map(c => c.value)
+                    }
+                });
+     
                 const documents = e.hits?.map( h => h.document );
                 res({
                     data: documents,
                     total: e.found,
-                    page: e.page
+                    page: e.page,
+                    facets
                 })
             }).catch( e => rej(e))
         }

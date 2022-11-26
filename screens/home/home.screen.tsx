@@ -6,7 +6,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Carousel, List, UserHeader } from '../../widgets';
 import { InputField, Text, Spacer } from '../../components';
 import { TEXT } from '../../constant/color.constant'; 
-import HomeCategories from './home-categories.component';
+import HomeCategories, { iCategory } from './home-categories.component';
 import useTypeSense from '../../hooks/useTypeSense';
 import { iStore } from '../../model/store.model';
 import { iListItem } from '../../types/list.types';
@@ -18,14 +18,11 @@ const CATEGORIES = [
     { label: 'Hardware', icon: 'account-hard-hat' }
 ];
 
-const STORES = [
-	{ id: '1', title: ['Store 1'], subTitle: ['08:00 AM - 09:00 PM'] },
-	{ id: '2', title: ['Store 2'], subTitle: ['08:00 AM - 09:00 PM'] },
-	{ id: '3', title: ['Store 3'], subTitle: ['08:00 AM - 09:00 PM'] },
-	{ id: '4', title: ['Store 4'], subTitle: ['08:00 AM - 09:00 PM'] },
-	{ id: '5', title: ['Store 5'], subTitle: ['08:00 AM - 09:00 PM'] },
-	{ id: '6', title: ['Store 6'], subTitle: ['08:00 AM - 09:00 PM'] },
-]
+
+const CATEGORY_ICON_MAPPING: {[key: string]: string} = {
+	'Mall': 'warehouse',
+	'Grocery': 'storefront-outline'
+}
 
 
 type HomeComponent = 'categories' | 'carousel' | 'near-text' | 'stores';
@@ -33,7 +30,7 @@ const components = ['categories','carousel','near-text','stores'] as HomeCompone
 const HomeScreenComponents: {
 	[key in HomeComponent]: any
 } = {
-	'categories': () => <HomeCategories data={CATEGORIES}/>,
+	'categories': (categories: iCategory[]) => <HomeCategories data={categories}/>,
 	'near-text': () => (
 		<Text text='Stores Near You' icon='chevron-right' 
 			color={TEXT.dark} style={styles.storeNearLabel}
@@ -49,6 +46,7 @@ const HomeScreen = () => {
 	const [loading, setLoading] = useState(false);
 	const { search } = useTypeSense();
 	const [storeList, setStoreList] = useState<iListItem[]>();
+	const [categories, setCategories] = useState<iCategory[]>();
  
 	useEffect(() => {
 		loadStores();		 
@@ -64,10 +62,17 @@ const HomeScreen = () => {
 			max_candidates: 1000,
 			max_hits: 15,
 			facet_by: 'category'			
-		});
+		}); 
 
-		const result = response.data.map( store => {
-			console.log(store)
+		if(response.facets){
+			const facets = response.facets['category'].map( c => ({
+				label: c,
+				icon: CATEGORY_ICON_MAPPING[c]
+			}));
+			setCategories(facets)
+		}
+
+		const result = response.data.map( store => { 
 			return ({
 				id: store.id,
 				title: [store.name],
@@ -76,6 +81,11 @@ const HomeScreen = () => {
 			})
 		});
 		setStoreList(result);
+	}
+
+	const getComponentProps = (c: HomeComponent) => {
+		if(c === 'stores')return storeList || [];
+		if(c === 'categories')return categories || [];
 	}
 
 	return (
@@ -98,9 +108,8 @@ const HomeScreen = () => {
 						horizontal={false}
 						data={components}
 						renderItem={({item}) => {
-
-
-							return HomeScreenComponents[item](storeList);
+							const props = getComponentProps(item);
+							return HomeScreenComponents[item](props);
 						}}
 						keyExtractor={(item) => item}
 					/>
