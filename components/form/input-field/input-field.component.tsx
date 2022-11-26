@@ -5,26 +5,37 @@ import styles from './input-field.style';
 
 
 interface iProps {
+    value?: string,
     icon?: string,
     placeholder?: string,
-    style?: ViewStyle
+    style?: ViewStyle,
+
+    onChange?: (text: any) => void
 }
 
 const InputField:React.FC<iProps> = ({
+    value,
     icon,
     placeholder,
-    style
+    style,
+    onChange
 }) => {
-  return (
-        <View style={[styles.container, style]}>
-            <TextInput
-                style={styles.input}
-                placeholder={placeholder}
-            />
+    const onChangeHandler = (e: any) => {
+        if(onChange)onChange(e)
+    }
 
-            {icon && <Icon name={icon}/>}
-        </View>
-  );
+    return (
+            <View style={[styles.container, style]}>
+                <TextInput
+                    value={value}
+                    style={styles.input}
+                    placeholder={placeholder}
+                    onChangeText={onChangeHandler}
+                />
+
+                {icon && <Icon name={icon}/>}
+            </View>
+    );
 }
 
 

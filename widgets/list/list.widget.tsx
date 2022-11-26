@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, View} from 'react-native'; 
-import { Spacer } from '../../components';
+import { Spacer, Text } from '../../components';
 import ListItem from '../list-item/list-item.widget';
 import styles from './list.style';
 
@@ -31,6 +31,15 @@ const List:React.FC<iProps> = ({
     const display = () => {
         return column === 1 ? 'list' : 'grid';
     }
+
+    const finalData = () => {
+        // Note: append placeholder when one item on list
+        // fix layout issue on 2 columns then 1 item
+        const isAppendPlaceHolder = data.length === 1 && column > 1;
+        if(!isAppendPlaceHolder)return data; 
+        return [ ...data, {} as any ];
+    }
+
     return (
         <View style={styles.container}>
             <FlatList 
@@ -45,7 +54,7 @@ const List:React.FC<iProps> = ({
                 ItemSeparatorComponent={Spacer}
                 horizontal={false}
                 numColumns={column}
-                data={data}
+                data={finalData()}
                 renderItem={({item}) => (
                     <ListItem
                         image={item.image}
@@ -58,6 +67,11 @@ const List:React.FC<iProps> = ({
                 )}
                 keyExtractor={(item) => item.id}
             />
+
+            {
+                data.length === 0 &&
+                <Text text='No results found!' style={styles.noResult}/>
+            }
         </View> 
     );
 }

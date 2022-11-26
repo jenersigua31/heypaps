@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, TextInput, View } from 'react-native';
 import Screen from '../../components/screen/screen.component';
 import styles from './home-screen.style';
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -45,8 +45,13 @@ const HomeScreen = () => {
     const { navigate } = useNavigation(); 
 	const [loading, setLoading] = useState(false);
 	const { search } = useTypeSense();
-	const [storeList, setStoreList] = useState<iListItem[]>();
+	const [storeList, setStoreList] = useState<iListItem[]>([]);
+	const [filteredStores, setFilteredStores] = useState<iListItem[]>([]);
 	const [categories, setCategories] = useState<iCategory[]>();
+	const [searchKey, setSearchKey] = useState<any>('');
+
+
+	const [text, setText] = useState('');
  
 	useEffect(() => {
 		loadStores();		 
@@ -84,19 +89,33 @@ const HomeScreen = () => {
 	}
 
 	const getComponentProps = (c: HomeComponent) => {
-		if(c === 'stores')return storeList || [];
+		if(c === 'stores'){
+			const finalList = !!searchKey.length ? filteredStores : storeList;
+			return finalList || [];
+		}
 		if(c === 'categories')return categories || [];
 	}
+
+	useEffect(() => {
+		if(!searchKey.length){
+			setFilteredStores([]);
+			return;
+		}
+		const filtered = storeList.filter( s => {
+			return !!s.title.find( title => title.toLowerCase().includes(searchKey.toLowerCase()))
+		});
+		setFilteredStores(filtered);
+	}, [searchKey])
 
 	return (
 		<Screen>
 			<View style={styles.container}>
 				<UserHeader/>
 				<View style={styles.search}>
-					<InputField placeholder='Search' icon="magnify"/>
+					<InputField placeholder='Search' icon="magnify" onChange={setSearchKey}/>
 				</View>
 				{
-					storeList &&
+					!!storeList.length &&
 					<FlatList 
 						refreshing={loading}
 						onRefresh={() => {
