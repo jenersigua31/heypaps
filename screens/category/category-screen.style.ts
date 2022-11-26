@@ -5,10 +5,12 @@ const styles = StyleSheet.create({
         backgroundColor:'#fff',
         flex:1
     },
+    title: {
+        paddingHorizontal:10
+    },
     search: {
         paddingHorizontal: 50,
-        top: -25,
-
+        top: -25, 
          
         shadowOffset: { width: 0, height: 1 },
         shadowColor: '#333',
@@ -19,7 +21,7 @@ const styles = StyleSheet.create({
         paddingVertical:10
     },
     storeNearLabel:{
-        marginHorizontal:20,
+        marginHorizontal:10,
     },
 });
 

@@ -28,8 +28,6 @@ const HomeCategories:React.FC<iProps> = ({
     onSelect
 }) => {
 
-    const {navigate} = useNavigation();
-
     const onSelectHandler = (category: iCategory) => {
         if(onSelect)onSelect(category)
     }

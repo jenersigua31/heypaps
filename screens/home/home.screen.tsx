@@ -10,19 +10,7 @@ import HomeCategories, { iCategory } from './home-categories.component';
 import useTypeSense from '../../hooks/useTypeSense';
 import { iStore } from '../../model/store.model';
 import { iListItem } from '../../types/list.types';
-
-const CATEGORIES = [
-    { label: 'Mall', icon: 'warehouse' },
-    { label: 'Grocery', icon: 'storefront-outline' },
-    { label: 'Food', icon: 'food-outline' },
-    { label: 'Hardware', icon: 'account-hard-hat' }
-];
-
-
-const CATEGORY_ICON_MAPPING: {[key: string]: string} = {
-	'Mall': 'warehouse',
-	'Grocery': 'storefront-outline'
-}
+import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant';
 
 
 type HomeComponent = 'categories' | 'carousel' | 'near-text' | 'stores';
@@ -41,33 +29,31 @@ const HomeScreenComponents: {
 	'stores': (data: iListItem[]) => <List id="home" data={data} column={2}/>
 }
 
-const HomeScreen = () => {
-    const { navigate } = useNavigation(); 
+const HomeScreen = () => { 
 	const [loading, setLoading] = useState(false);
 	const { search } = useTypeSense();
 	const [storeList, setStoreList] = useState<iListItem[]>([]);
 	const [filteredStores, setFilteredStores] = useState<iListItem[]>([]);
 	const [categories, setCategories] = useState<iCategory[]>();
 	const [searchKey, setSearchKey] = useState<any>('');
-
-
-	const [text, setText] = useState('');
+	
+	const searchParams = {
+		q: "*",
+		query_by: 'code',
+		filter_by: 'coordinates:(121.066487,12.355971, 5.1 km)',
+		sort_by:'coordinates(121.066487,12.355971):asc',
+		exhaustive_search:true,
+		max_candidates: 1000,
+		max_hits: 15,
+		facet_by: 'category'			
+	}
  
 	useEffect(() => {
 		loadStores();		 
 	}, [])
 
 	const loadStores = async () => {
-		const response = await search<iStore>('stores', {
-			q: "*",
-			query_by: 'code',
-			filter_by: 'coordinates:(121.066487,12.355971, 5.1 km)',
-			sort_by:'coordinates(121.066487,12.355971):asc',
-			exhaustive_search:true,
-			max_candidates: 1000,
-			max_hits: 15,
-			facet_by: 'category'			
-		}); 
+		const response = await search<iStore>('stores', searchParams); 
 
 		if(response.facets){
 			const facets = response.facets['category'].map( c => ({
