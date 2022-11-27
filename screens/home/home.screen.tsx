@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FlatList, TextInput, View } from 'react-native';
 import Screen from '../../components/screen/screen.component';
 import styles from './home-screen.style';
@@ -11,6 +11,7 @@ import useTypeSense from '../../hooks/useTypeSense';
 import { iStore } from '../../model/store.model';
 import { iListItem } from '../../types/list.types';
 import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant';
+import { iTypeSenseSearchParams } from '../../types/typesense.types';
 
 
 type HomeComponent = 'categories' | 'carousel' | 'near-text' | 'stores';
@@ -32,12 +33,11 @@ const HomeScreenComponents: {
 const HomeScreen = () => { 
 	const [loading, setLoading] = useState(false);
 	const { search } = useTypeSense();
-	const [storeList, setStoreList] = useState<iListItem[]>([]);
-	const [filteredStores, setFilteredStores] = useState<iListItem[]>([]);
+	const [storeList, setStoreList] = useState<iListItem[]>([]); 
 	const [categories, setCategories] = useState<iCategory[]>();
 	const [searchKey, setSearchKey] = useState<any>('');
 	
-	const searchParams = {
+	const searchParams = useRef<iTypeSenseSearchParams>({
 		q: "*",
 		query_by: 'code',
 		filter_by: 'coordinates:(121.066487,12.355971, 5.1 km)',
@@ -46,14 +46,14 @@ const HomeScreen = () => {
 		max_candidates: 1000,
 		max_hits: 15,
 		facet_by: 'category'			
-	}
+	})
  
 	useEffect(() => {
-		loadStores();		 
+		loadStores(searchParams.current);		 
 	}, [])
 
-	const loadStores = async () => {
-		const response = await search<iStore>('stores', searchParams); 
+	const loadStores = async (params: iTypeSenseSearchParams) => {
+		const response = await search<iStore>('stores', params); 
 
 		if(response.facets){
 			const facets = response.facets['category'].map( c => ({
@@ -75,22 +75,19 @@ const HomeScreen = () => {
 	}
 
 	const getComponentProps = (c: HomeComponent) => {
-		if(c === 'stores'){
-			const finalList = !!searchKey.length ? filteredStores : storeList;
-			return finalList || [];
-		}
+		if(c === 'stores')return storeList;
 		if(c === 'categories')return categories || [];
 	}
 
 	useEffect(() => {
-		if(!searchKey.length){
-			setFilteredStores([]);
-			return;
-		}
-		const filtered = storeList.filter( s => {
-			return !!s.title.find( title => title.toLowerCase().includes(searchKey.toLowerCase()))
-		});
-		setFilteredStores(filtered);
+		let newParams = searchParams.current;
+		if(!!searchKey.length){
+			newParams = {
+				...newParams,
+				filter_by: `${newParams.filter_by} && name:${searchKey}`
+			}
+		} 
+		loadStores(newParams); 
 	}, [searchKey])
 
 	return (
@@ -101,7 +98,7 @@ const HomeScreen = () => {
 					<InputField placeholder='Search' icon="magnify" onChange={setSearchKey}/>
 				</View>
 				{
-					!!storeList.length &&
+					!!storeList &&
 					<FlatList 
 						refreshing={loading}
 						onRefresh={() => {

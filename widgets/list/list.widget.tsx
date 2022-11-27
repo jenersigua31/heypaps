@@ -35,7 +35,7 @@ const List:React.FC<iProps> = ({
     const finalData = () => {
         // Note: append placeholder when one item on list
         // fix layout issue on 2 columns then 1 item
-        const isAppendPlaceHolder = data.length === 1 && column > 1;
+        const isAppendPlaceHolder = (data || []).length === 1 && column > 1;
         if(!isAppendPlaceHolder)return data; 
         return [ ...data, {} as any ];
     }
@@ -69,7 +69,7 @@ const List:React.FC<iProps> = ({
             />
 
             {
-                data.length === 0 &&
+                (data || []).length === 0 &&
                 <Text text='No results found!' style={styles.noResult}/>
             }
         </View> 

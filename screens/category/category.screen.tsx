@@ -1,5 +1,5 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FlatList, View} from 'react-native'; 
 import { InputField, Screen, Text } from '../../components';
 import { Carousel, List, UserHeader } from '../../widgets';
@@ -11,6 +11,7 @@ import { TEXT } from '../../constant/color.constant';
 import useTypeSense from '../../hooks/useTypeSense';
 import { iListItem } from '../../types/list.types';
 import { iStore } from '../../model/store.model'; 
+import { iTypeSenseSearchParams } from '../../types/typesense.types';
 
 type Props = NativeStackScreenProps<RootStackParamList, ScreenType.Category>;
 
@@ -35,39 +36,44 @@ const CagtegoryScreen = ({ route, navigation }: Props) => {
 	const [title, setTitle] = useState<string>('');
 	const [loading, setLoading] = useState(false);
 	const { search } = useTypeSense();
-	const [storeList, setStoreList] = useState<iListItem[]>([]);
-	const [filteredStores, setFilteredStores] = useState<iListItem[]>([]); 
+	const [storeList, setStoreList] = useState<iListItem[]>([]); 
 	const [searchKey, setSearchKey] = useState<any>('');
 
-	const searchParams = {
+	const searchParams = useRef<iTypeSenseSearchParams>({
 		q: "*",
 		query_by: 'code',
 		exhaustive_search:true,
 		max_candidates: 1000,
 		max_hits: 15		
-	}
+	})
 
 	useEffect(() => {
 		setTitle(route.params.label)
-		loadStores();		 
+		loadStores(getParams());		 
 	}, []);
 
-	useEffect(() => {
-		if(!searchKey.length){
-			setFilteredStores([]);
-			return;
-		}
-		const filtered = storeList.filter( s => {
-			return !!s.title.find( title => title.toLowerCase().includes(searchKey.toLowerCase()))
-		});
-		setFilteredStores(filtered);
-	}, [searchKey])
+	useEffect(() => { 
+		console.log(getParams())
+		loadStores(getParams()); 
+	}, [searchKey]);
 
-	const loadStores = async () => {
-		const response = await search<iStore>('stores', {
-			...searchParams,
+	const getParams = () => {
+		let newParams = {
+			...searchParams.current,
 			filter_by: `category:(${route.params.label})`
-		}); 
+		};
+
+		if(!!searchKey.length){
+			newParams = {
+				...newParams,
+				filter_by: `${newParams.filter_by} && name:${searchKey}`
+			}
+		} 
+		return newParams;
+	}
+
+	const loadStores = async (params: iTypeSenseSearchParams)  => {
+		const response = await search<iStore>('stores', params); 
 
 		const result = response.data.map( store => { 
 			return ({
@@ -76,7 +82,7 @@ const CagtegoryScreen = ({ route, navigation }: Props) => {
 				subTitle: [ `${store.store_in} - ${store.store_out}` ],
 				image: store.image
 			})
-		});
+		}); 
 		setStoreList(result);
 	}
 
@@ -85,10 +91,7 @@ const CagtegoryScreen = ({ route, navigation }: Props) => {
 	}
 
 	const getComponentProps = (c: CategoryComponent) => {
-		if(c === 'category-items'){
-			const finalList = !!searchKey.length ? filteredStores : storeList;
-			return finalList || [];
-		}
+		if(c === 'category-items')return storeList;
 	}
 
 	return (
@@ -100,7 +103,7 @@ const CagtegoryScreen = ({ route, navigation }: Props) => {
 				</View>  
 				<Text text={title} fontSize={28} style={styles.title} bold/>
 				{
-					!!storeList.length && 
+					!!storeList && 
 					<FlatList
 						refreshing={loading}
 						onRefresh={() => {
