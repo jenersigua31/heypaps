@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native'; 
 import { Icon, Text } from '../../../components';
@@ -9,16 +10,13 @@ interface iProps {
 }
 
 const LocationHeader:React.FC<iProps> = ({}) => {
-
-    const onBack = () => {
-
-    }
+    const { goBack } = useNavigation();
 
     return (
             <View style={styles.container}>
                 {/* <Text text='Location Header'/> */}
 
-                <TouchableOpacity onPress={onBack} style={styles.back}>
+                <TouchableOpacity onPress={goBack} style={styles.back}>
                     <Icon name="chevron-left" size={30} style={styles.back}/>
                 </TouchableOpacity>
 

@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, TouchableWithoutFeedback, TouchableHighlight, TouchableOpacity} from 'react-native';
 import { Icon } from '../../components';
@@ -11,6 +12,11 @@ interface iProps {
 const UserHeader:React.FC<iProps> = ({
     onBack
 }) => {
+    const { navigate } = useNavigation();
+
+    const onPressHandler = () => {
+        navigate("Location" as never)
+    }
 
     return (
         <View style={styles.container}>
@@ -25,13 +31,15 @@ const UserHeader:React.FC<iProps> = ({
                 <Text style={styles.greetings}>
                     Hey, Bryan Kim!
                 </Text>
-                <View style={styles.location}>
-                    <Icon name='map-marker' style={styles.locationIcon}/>
-                    <Text style={styles.address}>
-                        Muntinlupa
-                    </Text>
-                    <Icon name='chevron-down'/>
-                </View>
+                <TouchableWithoutFeedback onPress={onPressHandler}>
+                    <View style={styles.location}>
+                        <Icon name='map-marker' style={styles.locationIcon}/>
+                        <Text style={styles.address}>
+                            Muntinlupa
+                        </Text>
+                        <Icon name='chevron-down'/>
+                    </View>
+                </TouchableWithoutFeedback>
             </View>
 
             <Icon name='account-circle' size={45} color="#000"/>
