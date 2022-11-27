@@ -13,6 +13,7 @@ import { iListItem } from '../../types/list.types';
 import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant';
 import { iTypeSenseSearchParams } from '../../types/typesense.types';
 import StoreList from '../../widgets/store-list/store-list.widget';
+import useStoreAPI, { iApiConfig } from '../../hooks/useAPI';
 
 
 type HomeComponent = 'categories' | 'carousel' | 'near-text' | 'stores';
@@ -31,14 +32,9 @@ const HomeScreenComponents: {
 	'stores': (data: iListItem[]) => <StoreList id="home" data={data} />
 }
 
-const HomeScreen = () => { 
-	const [loading, setLoading] = useState(false);
-	const { search } = useTypeSense();
-	const [storeList, setStoreList] = useState<iListItem[]>([]); 
-	const [categories, setCategories] = useState<iCategory[]>();
-	const [searchKey, setSearchKey] = useState<any>('');
-	
-	const searchParams = useRef<iTypeSenseSearchParams>({
+const apiConfig: iApiConfig<iStore, iListItem, iCategory> = {
+	collection: 'stores',
+	initialParams: {
 		q: "*",
 		query_by: 'code',
 		filter_by: 'coordinates:(121.066487,12.355971, 5.1 km)',
@@ -47,48 +43,37 @@ const HomeScreen = () => {
 		max_candidates: 1000,
 		max_hits: 15,
 		facet_by: 'category'			
+	},
+	listItem: item => ({
+		id: item.id,
+		title: [item.name],
+		subTitle: [ `${item.store_in} - ${item.store_out}` ],
+		image: item.image
+	}),
+	facetItem: c => ({
+		label: c,
+		icon: CATEGORY_ICON_MAPPING[c]
 	})
- 
-	useEffect(() => {
-		loadStores(searchParams.current);	
-	}, [])
+}
 
-	const loadStores = async (params: iTypeSenseSearchParams) => {
-		const response = await search<iStore>('stores', params); 
+const HomeScreen = () => { 
+	const [loading, setLoading] = useState(false);
+	const { load, list, facets } = useStoreAPI(apiConfig);
 
-		if(response.facets){
-			const facets = response.facets['category'].map( c => ({
-				label: c,
-				icon: CATEGORY_ICON_MAPPING[c]
-			}));
-			setCategories(facets)
-		}
+	const [searchKey, setSearchKey] = useState<any>('');
 
-		const result = response.data.map( store => { 
-			return ({
-				id: store.id,
-				title: [store.name],
-				subTitle: [ `${store.store_in} - ${store.store_out}` ],
-				image: store.image
-			})
-		});
-		setStoreList(result);
-	}
+	useEffect(() => { 
+		load();
+	}, []) 
 
 	const getComponentProps = (c: HomeComponent) => {
-		if(c === 'stores')return storeList;
-		if(c === 'categories')return categories || [];
+		if(c === 'stores')return list;
+		if(c === 'categories')return facets || [];
 	}
 
-	useEffect(() => {
-		let newParams = searchParams.current;
-		if(!!searchKey.length){
-			newParams = {
-				...newParams,
-				filter_by: `${newParams.filter_by} && name:${searchKey}`
-			}
-		} 
-		loadStores(newParams); 
+	useEffect(() => { 
+		const filter = !!searchKey.length ? `name:${searchKey}`: undefined;
+		load(filter)
 	}, [searchKey])
 
 	return (
@@ -99,7 +84,7 @@ const HomeScreen = () => {
 					<InputField placeholder='Search' icon="magnify" onChange={setSearchKey}/>
 				</View>
 				{
-					!!storeList &&
+					list &&
 					<FlatList 
 						refreshing={loading}
 						onRefresh={() => {

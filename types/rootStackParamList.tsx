@@ -12,6 +12,8 @@ export type RootStackParamList = {
 	[Screen.Cart]: {},
 	[Screen.Search]: {},
 	[Screen.Location]: {},
-	[Screen.Store]: {},
+	[Screen.Store]: {
+		id: string
+	},
 	'HomeNavigation': {};
 };

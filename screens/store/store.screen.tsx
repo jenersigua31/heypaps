@@ -1,10 +1,16 @@
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useState } from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useState, useRef, useEffect} from 'react';
 import { FlatList, Modal, ScrollView, View } from 'react-native';
 import { Icon, Screen, Text } from '../../components';
+import { RootStackParamList } from '../../types/rootStackParamList';
+import { iTypeSenseSearchParams } from '../../types/typesense.types';
 import { CategoryList, GroupList, ViewProduct } from '../../widgets';
 import SearchHeader from '../../widgets/search-header/search-header.widget';
+import { Screen as ScreenType} from '../../types/screen.types';
 import styles from './store.style';
+import useTypeSense from '../../hooks/useTypeSense';
+import { iProduct } from '../../model/product.model';
 
 
 const PRODUCTS = [
@@ -50,6 +56,8 @@ const CATEGORIES = [
     { label: 'Fish', icon: 'fish' },
 ];
 
+type Props = NativeStackScreenProps<RootStackParamList, ScreenType.Store>;
+
 type StoreComponent = 'info' | 'categories' | 'products';
 const components = ['info','categories','products'] as StoreComponent[]
 const StoreComponents: {
@@ -86,20 +94,51 @@ const StoreComponents: {
     },
 }
 
-const StoreScreen:React.FC<iProps> = ({}) => {
+const StoreScreen = ({ route, navigation }: Props) => {
+    const { search } = useTypeSense();
     const [loading, setLoading] = useState(false);
     const [viewProduct, setViewProduct] = useState(false);
+    const searchParams = useRef<iTypeSenseSearchParams>({
+		q: "*",
+		query_by: 'code',
+		exhaustive_search:true,
+		max_candidates: 1000,
+		max_hits: 15,
+		facet_by: 'category'			
+	})
     
+    useEffect(() => {
+		loadProducts(getParams());	
+	}, [])
     
-    useFocusEffect(() => {
-        setTimeout(() => {
-            setViewProduct(true);
-        }, 4000); 
-    })
+    // useFocusEffect(() => {
+    //     setTimeout(() => {
+    //         setViewProduct(true);
+    //     }, 4000); 
+    // })
+
+    const getParams = () => {
+		let newParams = {
+			...searchParams.current,
+			filter_by: `store_id:=6377cbaed7a749ac18b54369`//`store_id:(${route.params.id})`
+		};
+		return newParams;
+	}
+
+    const loadProducts = async (params: iTypeSenseSearchParams) => {
+        const response = await search<iProduct>('products', params);
+        const result = response.data.map( product => { 
+			return ({
+				...product
+			})
+		}); 
+        console.log(result)
+    }
 
     const onCloseHandler = () => {
         setViewProduct(false)
     }
+
     return (
             <Screen>
                 <View style={styles.container}>
