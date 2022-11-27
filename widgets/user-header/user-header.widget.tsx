@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, TouchableWithoutFeedback, TouchableHighlight, TouchableOpacity} from 'react-native';
 import { Icon } from '../../components';
+import { Screen } from '../../types/screen.types';
 import styles from './user-header.style';
 
 
@@ -15,7 +16,7 @@ const UserHeader:React.FC<iProps> = ({
     const { navigate } = useNavigation();
 
     const onPressHandler = () => {
-        navigate("Location" as never)
+        navigate(Screen.Location as never)
     }
 
     return (

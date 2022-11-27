@@ -1,4 +1,4 @@
-export type TypeSenseCollection = 'stores';
+export type TypeSenseCollection = 'stores' | 'products';
 
 export interface iTypeSenseSearchParams {
     q: string,

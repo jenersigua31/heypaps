@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, View, ViewStyle} from 'react-native';
+import { Image, TouchableOpacity, View, ViewStyle} from 'react-native';
 import { Text } from '../../components';
 import { TEXT } from '../../constant/color.constant';
 import styles from './list-item.style';
@@ -11,7 +11,8 @@ interface iProps {
 	title: string[],
 	subTitle?: string[],
 	display?: 'grid' | 'list',
-	imageTemplate?: (img: string) => JSX.Element
+	imageTemplate?: (img: string) => JSX.Element,
+	onPress?: () => void
 }
 
 const ListItem:React.FC<iProps> = ({
@@ -20,7 +21,8 @@ const ListItem:React.FC<iProps> = ({
 	title = [],
 	subTitle = [],
 	display = 'grid',
-	imageTemplate
+	imageTemplate,
+	onPress
 }) => {
 
 	const listStyle = () => {
@@ -32,7 +34,7 @@ const ListItem:React.FC<iProps> = ({
 	}
 
 	return (
-			<View style={[styles.container, style, listStyle().container]}>
+			<TouchableOpacity style={[styles.container, style, listStyle().container]} onPress={onPress}>
 				<View style={[styles.image, listStyle().image]}>
 					{
 						imageTemplate ? 
@@ -57,10 +59,8 @@ const ListItem:React.FC<iProps> = ({
 							<Text key={i} text={t} color={TEXT.light} fontSize={10} bold/>
 						))
 					}
-				</View>
-	
-				
-			</View>
+				</View> 
+			</TouchableOpacity>
 	);
 }
 

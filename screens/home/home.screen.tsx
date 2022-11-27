@@ -12,6 +12,7 @@ import { iStore } from '../../model/store.model';
 import { iListItem } from '../../types/list.types';
 import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant';
 import { iTypeSenseSearchParams } from '../../types/typesense.types';
+import StoreList from '../../widgets/store-list/store-list.widget';
 
 
 type HomeComponent = 'categories' | 'carousel' | 'near-text' | 'stores';
@@ -27,7 +28,7 @@ const HomeScreenComponents: {
 		/>
 	),
 	'carousel': () => <View style={styles.carousel}><Carousel height={150}/></View>,
-	'stores': (data: iListItem[]) => <List id="home" data={data} column={2}/>
+	'stores': (data: iListItem[]) => <StoreList id="home" data={data} />
 }
 
 const HomeScreen = () => { 
@@ -49,7 +50,7 @@ const HomeScreen = () => {
 	})
  
 	useEffect(() => {
-		loadStores(searchParams.current);		 
+		loadStores(searchParams.current);	
 	}, [])
 
 	const loadStores = async (params: iTypeSenseSearchParams) => {

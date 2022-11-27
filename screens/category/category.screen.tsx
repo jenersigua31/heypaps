@@ -12,6 +12,7 @@ import useTypeSense from '../../hooks/useTypeSense';
 import { iListItem } from '../../types/list.types';
 import { iStore } from '../../model/store.model'; 
 import { iTypeSenseSearchParams } from '../../types/typesense.types';
+import StoreList from '../../widgets/store-list/store-list.widget';
 
 type Props = NativeStackScreenProps<RootStackParamList, ScreenType.Category>;
 
@@ -28,7 +29,7 @@ const CategoryScreenComponents: {
 		/>
 	),
 	'carousel': () => <View style={styles.carousel}><Carousel height={150}/></View>,
-	'category-items': (data: iListItem[]) => <List id="category-stores" data={data} column={2}/>
+	'category-items': (data: iListItem[]) => <StoreList id="category-stores" data={data}/>
 }
 
 const CagtegoryScreen = ({ route, navigation }: Props) => {

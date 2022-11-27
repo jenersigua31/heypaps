@@ -16,7 +16,9 @@ interface iProps {
     data: iListItem[],
     column?: number,
     image?: string,
-    listItemImageTemplate?: (img: string) => JSX.Element
+    listItemImageTemplate?: (img: string) => JSX.Element,
+
+    onSelect?: (data: iListItem) => void
 }
 
 const List:React.FC<iProps> = ({
@@ -24,7 +26,8 @@ const List:React.FC<iProps> = ({
     data,
     column = 1,
     image,
-    listItemImageTemplate
+    listItemImageTemplate,
+    onSelect
 }) => {
     const [loading, setLoading] = useState(false);
 
@@ -57,6 +60,7 @@ const List:React.FC<iProps> = ({
                 data={finalData()}
                 renderItem={({item}) => (
                     <ListItem
+                        onPress={() => onSelect && onSelect(item)}
                         image={item.image}
                         display={display()}
                         style={styles.store}
