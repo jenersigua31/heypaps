@@ -7,11 +7,13 @@ import styles from './group-list.style';
 
 
 interface iProps {
-    data: iGroupListItem[]
+    data: iGroupListItem[],
+    listItemImageTemplate?: (img: string) => JSX.Element
 }
 
 const GroupList:React.FC<iProps> = ({
-    data
+    data,
+    listItemImageTemplate
 }) => {
   return (
         <View style={styles.container}>
@@ -39,7 +41,7 @@ const GroupList:React.FC<iProps> = ({
                         }
                     </View>
                     
-                    <List data={g.list} column={2} id={g.id}/>
+                    <List data={g.list} column={2} id={g.id} listItemImageTemplate={listItemImageTemplate}/>
                 </React.Fragment>
             )) }
         </View>

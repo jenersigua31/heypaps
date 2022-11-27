@@ -5,5 +5,7 @@ export interface iProduct {
     price: number,
     quantity: number,
     sale_price: number,
-    store_id: string
+    store_id: string,
+    category: string,
+    measurement: string
 }

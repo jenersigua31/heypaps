@@ -11,7 +11,7 @@ import { TEXT } from '../../constant/color.constant';
 import { iListItem } from '../../types/list.types';
 import { iStore } from '../../model/store.model';  
 import StoreList from '../../widgets/store-list/store-list.widget';
-import useAPI, { iApiConfig } from '../../hooks/useAPI';
+import useDataLoader, { iDataLoaderConfig } from '../../hooks/useDataLoader';
 
 type Props = NativeStackScreenProps<RootStackParamList, ScreenType.Category>;
 
@@ -27,10 +27,10 @@ const CategoryScreenComponents: {
 		/>
 	),
 	'carousel': () => <View style={styles.carousel}><Carousel height={150}/></View>,
-	'category-items': (data: iListItem[]) => <StoreList id="category-stores" data={data}/>
+	'category-items': (data: iStore[]) => <StoreList id="category-stores" data={data}/>
 }
 
-const apiConfig: iApiConfig<iStore, iListItem, any> = {
+const apiConfig: iDataLoaderConfig<iStore, iListItem, any> = {
 	collection: 'stores',
 	initialParams: {
 		q: "*",
@@ -38,20 +38,14 @@ const apiConfig: iApiConfig<iStore, iListItem, any> = {
 		exhaustive_search:true,
 		max_candidates: 1000,
 		max_hits: 15		
-	},
-	listItem: store => ({
-		id: store.id,
-		title: [store.name],
-		subTitle: [ `${store.store_in} - ${store.store_out}` ],
-		image: store.image
-	})
+	}
 }
 
 const CagtegoryScreen = ({ route, navigation }: Props) => {
 	const { goBack } = useNavigation();
 	const [title, setTitle] = useState<string>('');
 	const [loading, setLoading] = useState(false); 
-	const { load, list } = useAPI(apiConfig); 
+	const { load, list } = useDataLoader(apiConfig); 
 	const [searchKey, setSearchKey] = useState<any>('');
  
 	useEffect(() => {

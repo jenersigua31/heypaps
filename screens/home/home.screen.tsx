@@ -10,7 +10,7 @@ import { iStore } from '../../model/store.model';
 import { iListItem } from '../../types/list.types';
 import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant'; 
 import StoreList from '../../widgets/store-list/store-list.widget';
-import useAPI, { iApiConfig } from '../../hooks/useAPI';
+import useDataLoader, { iDataLoaderConfig } from '../../hooks/useDataLoader';
 
 
 type HomeComponent = 'categories' | 'carousel' | 'near-text' | 'stores';
@@ -26,10 +26,10 @@ const HomeScreenComponents: {
 		/>
 	),
 	'carousel': () => <View style={styles.carousel}><Carousel height={150}/></View>,
-	'stores': (data: iListItem[]) => <StoreList id="home" data={data} />
+	'stores': (data: iStore[]) => <StoreList id="home" data={data} />
 }
 
-const apiConfig: iApiConfig<iStore, iListItem, iCategory> = {
+const apiConfig: iDataLoaderConfig<iStore, iListItem, iCategory> = {
 	collection: 'stores',
 	initialParams: {
 		q: "*",
@@ -41,12 +41,6 @@ const apiConfig: iApiConfig<iStore, iListItem, iCategory> = {
 		max_hits: 15,
 		facet_by: 'category'			
 	},
-	listItem: item => ({
-		id: item.id,
-		title: [item.name],
-		subTitle: [ `${item.store_in} - ${item.store_out}` ],
-		image: item.image
-	}),
 	facetItem: c => ({
 		label: c,
 		icon: CATEGORY_ICON_MAPPING[c]
@@ -55,7 +49,7 @@ const apiConfig: iApiConfig<iStore, iListItem, iCategory> = {
 
 const HomeScreen = () => { 
 	const [loading, setLoading] = useState(false);
-	const { load, list, facets } = useAPI(apiConfig);
+	const { load, list, facets } = useDataLoader(apiConfig);
 
 	const [searchKey, setSearchKey] = useState<any>('');
 

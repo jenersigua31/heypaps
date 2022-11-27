@@ -11,6 +11,11 @@ import { Screen as ScreenType} from '../../types/screen.types';
 import styles from './store.style';
 import useTypeSense from '../../hooks/useTypeSense';
 import { iProduct } from '../../model/product.model';
+import { iStore } from '../../model/store.model';
+import useDataLoader, { iDataLoaderConfig } from '../../hooks/useDataLoader';
+import { iGroupListItem, iListItem } from '../../types/list.types';
+import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant';
+import { iCategory } from '../home/home-categories.component';
 
 
 const PRODUCTS = [
@@ -48,14 +53,7 @@ const PRODUCT_GROUP = [
 interface iProps {
     
 }
-const CATEGORIES = [
-    { label: 'Beverages', icon: 'beer' },
-    { label: 'Noodles', icon: 'noodles' },
-    { label: 'Bread', icon: 'bread-slice-outline' },
-    { label: 'Meat', icon: 'food-steak' },
-    { label: 'Fish', icon: 'fish' },
-];
-
+ 
 type Props = NativeStackScreenProps<RootStackParamList, ScreenType.Store>;
 
 type StoreComponent = 'info' | 'categories' | 'products';
@@ -63,21 +61,21 @@ const components = ['info','categories','products'] as StoreComponent[]
 const StoreComponents: {
 	[key in StoreComponent]: any
 } = {
-	'info': () => (
+	'info': (store: iStore) => (
         <View style={styles.info}>
-            <Text text='Store Name Here' fontSize={18} bold/>
-            <Text text='Store location address here' fontSize={14}/>
+            <Text text={store.name} fontSize={18} bold/>
+            <Text text={store.address} fontSize={14}/>
         </View>
     ),
-	'categories': () => (
+	'categories': (facets: iCategory[]) => (
 		<View style={styles.categories}>
             <Text text='Categories' fontSize={14} bold icon='chevron-right'/>
             <ScrollView horizontal={true} style={styles.scroll}>
-                <CategoryList data={CATEGORIES}/>
+                <CategoryList data={facets}/>
             </ScrollView>
         </View>
 	),
-	'products': () => {
+	'products': (data: iGroupListItem[]) => {
         const imageTemplate = (img: string) => {
             return (
                 <>
@@ -89,54 +87,79 @@ const StoreComponents: {
             )
         }
         return (
-            <GroupList data={PRODUCT_GROUP}/>
+            <GroupList data={data} listItemImageTemplate={imageTemplate}/>
         )
     },
 }
 
-const StoreScreen = ({ route, navigation }: Props) => {
-    const { search } = useTypeSense();
-    const [loading, setLoading] = useState(false);
-    const [viewProduct, setViewProduct] = useState(false);
-    const searchParams = useRef<iTypeSenseSearchParams>({
+const apiConfig: iDataLoaderConfig<iProduct, iListItem, any> = {
+	collection: 'products',
+	initialParams: {
 		q: "*",
 		query_by: 'code',
 		exhaustive_search:true,
 		max_candidates: 1000,
 		max_hits: 15,
 		facet_by: 'category'			
-	})
+	},
+    facetItem: item => ({
+       label: item,
+       icon: CATEGORY_ICON_MAPPING[item]
+    })
+}
+
+const StoreScreen = ({ route, navigation }: Props) => {
+    const [loading, setLoading] = useState(false);
+    const [viewProduct, setViewProduct] = useState(false);
+    const { load, list, facets } = useDataLoader(apiConfig); 
     
-    useEffect(() => {
-		loadProducts(getParams());	
+    useEffect(() => {  
+        load([`store_id:=${route.params.id}`])
 	}, [])
     
-    // useFocusEffect(() => {
-    //     setTimeout(() => {
-    //         setViewProduct(true);
-    //     }, 4000); 
-    // })
-
-    const getParams = () => {
-		let newParams = {
-			...searchParams.current,
-			filter_by: `store_id:=6377cbaed7a749ac18b54369`//`store_id:(${route.params.id})`
-		};
-		return newParams;
-	}
-
-    const loadProducts = async (params: iTypeSenseSearchParams) => {
-        const response = await search<iProduct>('products', params);
-        const result = response.data.map( product => { 
-			return ({
-				...product
-			})
-		}); 
-        console.log(result)
-    }
+    useEffect(() => {  
+        console.log(facets)
+	}, [facets])
 
     const onCloseHandler = () => {
         setViewProduct(false)
+    }
+
+    const getComponentParams = (item: StoreComponent) => {
+        if(item === 'info')return route.params;
+        if(item === 'categories')return facets;
+        if(item === 'products') {
+            const productGroup: iGroupListItem[] = [];
+            facets.forEach( (f,i) => {
+                const facet = f.label;
+                const products = (list as iProduct[])
+                    .filter((l: iProduct) => l.category === facet)
+                    .map( p => ({ 
+                        id: String(p.id), 
+                        title: [
+                            `₱ ${p.price}`, 
+                            p.description
+                        ], 
+                        subTitle: [p.measurement], 
+                        image: p.image
+                    } as iListItem));
+
+                productGroup.push(
+                    {
+                        id: String(i),
+                        labelLeft: {
+                            text: facet,
+                            icon: 'chevron-right'
+                        },
+                        labelRight: {
+                            text: 'View all'
+                        },
+                        list: products                    
+                    }
+                )
+            }) ;
+            return productGroup;
+        }
     }
 
     return (
@@ -154,7 +177,7 @@ const StoreScreen = ({ route, navigation }: Props) => {
                             }}
                             horizontal={false}
                             data={components}
-                            renderItem={({item}) => StoreComponents[item]() }
+                            renderItem={({item}) => StoreComponents[item](getComponentParams(item)) }
                             keyExtractor={(item) => item}
                         />
                     </View>

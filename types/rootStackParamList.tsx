@@ -1,3 +1,4 @@
+import { iStore } from "../model/store.model";
 import { Screen } from "./screen.types";
 
 export type RootStackParamList = {
@@ -12,8 +13,6 @@ export type RootStackParamList = {
 	[Screen.Cart]: {},
 	[Screen.Search]: {},
 	[Screen.Location]: {},
-	[Screen.Store]: {
-		id: string
-	},
+	[Screen.Store]: iStore,
 	'HomeNavigation': {};
 };

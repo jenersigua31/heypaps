@@ -26,7 +26,7 @@ const useTypeSense = () => {
                 .collections(collection)
                 .documents()
                 .search(params)
-            .then((e) => {  
+            .then((e) => { 
 
                 let facets: {
                     [key: string]: string[]
