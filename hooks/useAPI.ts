@@ -22,23 +22,25 @@ const useAPI = <CollectionType, ListType, FacetType>({
     const [list, setList] = useState<ListType[]>([]); 
 	const [facets, setFacets] = useState<FacetType[]>([]);
 
-    const load = async (filter?: string) => {
+    const load = async (filter?: string[]) => {
         const response = await search<CollectionType>(collection, getParams(filter)); 
 
 		if(facetItem && response.facets && initialParams.facet_by ){
             const facets = response.facets[initialParams.facet_by].map( facetItem );
 			setFacets(facets)
 		}
-        const result = response.data.map( listItem )
+        const result = response.data.map( listItem );
+        console.log(response.data.length)
 		setList(result);
     }
 
-    const getParams = (filter?: string) => {
+    const getParams = (filter?: string[]) => {
         let newParams = {...initialParams};
         if(filter){
+            const currentFilter = newParams.filter_by ? `${newParams.filter_by} &&` : ''
             newParams = {
                 ...newParams,
-                filter_by: `${newParams.filter_by} && ${filter}`
+                filter_by: `${currentFilter} ${filter.join('&&')}`
             }
         }
         return newParams;

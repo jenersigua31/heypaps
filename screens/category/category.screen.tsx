@@ -1,21 +1,19 @@
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect, useRef } from 'react';
 import { FlatList, View} from 'react-native'; 
 import { InputField, Screen, Text } from '../../components';
-import { Carousel, List, UserHeader } from '../../widgets';
+import { Carousel, UserHeader } from '../../widgets';
 import styles from './category-screen.style';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'; 
 import { Screen as ScreenType} from '../../types/screen.types';
 import { RootStackParamList } from '../../types/rootStackParamList'; 
-import { TEXT } from '../../constant/color.constant';
-import useTypeSense from '../../hooks/useTypeSense';
+import { TEXT } from '../../constant/color.constant'; 
 import { iListItem } from '../../types/list.types';
-import { iStore } from '../../model/store.model'; 
-import { iTypeSenseSearchParams } from '../../types/typesense.types';
+import { iStore } from '../../model/store.model';  
 import StoreList from '../../widgets/store-list/store-list.widget';
+import useAPI, { iApiConfig } from '../../hooks/useAPI';
 
 type Props = NativeStackScreenProps<RootStackParamList, ScreenType.Category>;
-
 
 type CategoryComponent = 'carousel' | 'near-text' | 'category-items';
 const components = ['carousel','near-text','category-items'] as CategoryComponent[]
@@ -32,67 +30,48 @@ const CategoryScreenComponents: {
 	'category-items': (data: iListItem[]) => <StoreList id="category-stores" data={data}/>
 }
 
-const CagtegoryScreen = ({ route, navigation }: Props) => {
-	const { goBack } = useNavigation();
-	const [title, setTitle] = useState<string>('');
-	const [loading, setLoading] = useState(false);
-	const { search } = useTypeSense();
-	const [storeList, setStoreList] = useState<iListItem[]>([]); 
-	const [searchKey, setSearchKey] = useState<any>('');
-
-	const searchParams = useRef<iTypeSenseSearchParams>({
+const apiConfig: iApiConfig<iStore, iListItem, any> = {
+	collection: 'stores',
+	initialParams: {
 		q: "*",
 		query_by: 'code',
 		exhaustive_search:true,
 		max_candidates: 1000,
 		max_hits: 15		
+	},
+	listItem: store => ({
+		id: store.id,
+		title: [store.name],
+		subTitle: [ `${store.store_in} - ${store.store_out}` ],
+		image: store.image
 	})
+}
 
+const CagtegoryScreen = ({ route, navigation }: Props) => {
+	const { goBack } = useNavigation();
+	const [title, setTitle] = useState<string>('');
+	const [loading, setLoading] = useState(false); 
+	const { load, list } = useAPI(apiConfig); 
+	const [searchKey, setSearchKey] = useState<any>('');
+ 
 	useEffect(() => {
-		setTitle(route.params.label)
-		loadStores(getParams());		 
+		setTitle(route.params.label);
 	}, []);
 
-	useEffect(() => { 
-		console.log(getParams())
-		loadStores(getParams()); 
-	}, [searchKey]);
-
-	const getParams = () => {
-		let newParams = {
-			...searchParams.current,
-			filter_by: `category:(${route.params.label})`
-		};
-
-		if(!!searchKey.length){
-			newParams = {
-				...newParams,
-				filter_by: `${newParams.filter_by} && name:${searchKey}`
-			}
-		} 
-		return newParams;
-	}
-
-	const loadStores = async (params: iTypeSenseSearchParams)  => {
-		const response = await search<iStore>('stores', params); 
-
-		const result = response.data.map( store => { 
-			return ({
-				id: store.id,
-				title: [store.name],
-				subTitle: [ `${store.store_in} - ${store.store_out}` ],
-				image: store.image
-			})
-		}); 
-		setStoreList(result);
-	}
+	useEffect(() => {   
+		const filters = [
+			`category:${route.params.label}`
+		];
+		if(!!searchKey.length)filters.push(`name:${searchKey}`); 
+		load(filters);	 
+	}, [searchKey]); 
 
 	const onBackHandler = () => {
 		goBack();
 	}
 
 	const getComponentProps = (c: CategoryComponent) => {
-		if(c === 'category-items')return storeList;
+		if(c === 'category-items')return list;
 	}
 
 	return (
@@ -104,7 +83,7 @@ const CagtegoryScreen = ({ route, navigation }: Props) => {
 				</View>  
 				<Text text={title} fontSize={28} style={styles.title} bold/>
 				{
-					!!storeList && 
+					!!list && 
 					<FlatList
 						refreshing={loading}
 						onRefresh={() => {

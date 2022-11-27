@@ -2,18 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FlatList, TextInput, View } from 'react-native';
 import Screen from '../../components/screen/screen.component';
 import styles from './home-screen.style';
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { Carousel, List, UserHeader } from '../../widgets';
+import { Carousel, UserHeader } from '../../widgets';
 import { InputField, Text, Spacer } from '../../components';
 import { TEXT } from '../../constant/color.constant'; 
 import HomeCategories, { iCategory } from './home-categories.component';
-import useTypeSense from '../../hooks/useTypeSense';
 import { iStore } from '../../model/store.model';
 import { iListItem } from '../../types/list.types';
-import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant';
-import { iTypeSenseSearchParams } from '../../types/typesense.types';
+import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant'; 
 import StoreList from '../../widgets/store-list/store-list.widget';
-import useStoreAPI, { iApiConfig } from '../../hooks/useAPI';
+import useAPI, { iApiConfig } from '../../hooks/useAPI';
 
 
 type HomeComponent = 'categories' | 'carousel' | 'near-text' | 'stores';
@@ -58,13 +55,9 @@ const apiConfig: iApiConfig<iStore, iListItem, iCategory> = {
 
 const HomeScreen = () => { 
 	const [loading, setLoading] = useState(false);
-	const { load, list, facets } = useStoreAPI(apiConfig);
+	const { load, list, facets } = useAPI(apiConfig);
 
 	const [searchKey, setSearchKey] = useState<any>('');
-
-	useEffect(() => { 
-		load();
-	}, []) 
 
 	const getComponentProps = (c: HomeComponent) => {
 		if(c === 'stores')return list;
@@ -72,7 +65,7 @@ const HomeScreen = () => {
 	}
 
 	useEffect(() => { 
-		const filter = !!searchKey.length ? `name:${searchKey}`: undefined;
+		const filter = !!searchKey.length ? [`name:${searchKey}`]: undefined;
 		load(filter)
 	}, [searchKey])
 
