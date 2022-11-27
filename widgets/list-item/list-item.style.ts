@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     image: {
-        backgroundColor: BACKGROUND.light,
+        backgroundColor: '#fff',
         height: 100,
         marginBottom:5,
         alignItems: 'center',

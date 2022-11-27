@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { BACKGROUND } from '../../constant/color.constant';
+import { BACKGROUND, THEME } from '../../constant/color.constant';
 
 const styles = StyleSheet.create({
     container: {
@@ -25,17 +25,38 @@ const styles = StyleSheet.create({
     },
     products: { 
     },
-    imgTemplate: {
+    imgTemplateContainer: {
         height:'100%',
         width: '100%',
         display:'flex',
         alignItems:'flex-end',
         flexDirection: 'row',
         justifyContent: 'center',
+        position:'relative',
+        backgroundColor: '#fff'
+    },
+    imgTemplate: {
+        position:'absolute',
+        top:0,
+        left:0,
+        width: '100%',
+        height: '100%',
+        resizeMode: 'contain'
+    },
+    buttons: {
+        // position:'absolute',
+        // top:0,
+        // left:0,
+        // backgroundColor: '#eee',
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'center',
         padding: 10
     },
     icon: {
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        backgroundColor: '#fff',
+        borderRadius: 15
     }
 
 });

@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useState, useRef, useEffect} from 'react';
-import { FlatList, Modal, ScrollView, View } from 'react-native';
+import { FlatList, Image, Modal, ScrollView, View } from 'react-native';
 import { Icon, Screen, Text } from '../../components';
 import { RootStackParamList } from '../../types/rootStackParamList';
 import { iTypeSenseSearchParams } from '../../types/typesense.types';
@@ -16,6 +16,7 @@ import useDataLoader, { iDataLoaderConfig } from '../../hooks/useDataLoader';
 import { iGroupListItem, iListItem } from '../../types/list.types';
 import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant';
 import { iCategory } from '../home/home-categories.component';
+import { THEME } from '../../constant/color.constant';
 
 
 const PRODUCTS = [
@@ -76,14 +77,18 @@ const StoreComponents: {
         </View>
 	),
 	'products': (data: iGroupListItem[]) => {
-        const imageTemplate = (img: string) => {
+        const imageTemplate = (img: string) => { 
             return (
-                <>
-                    <View style={styles.imgTemplate}> 
-                        <Icon name="minus-circle-outline" style={styles.icon}/>    
-                        <Icon name="plus-circle-outline" style={styles.icon}/>                 
+                <View style={styles.imgTemplateContainer}> 
+                    { img && <Image
+                        style={styles.imgTemplate}
+                        source={{uri: img}}
+                    /> }
+                    <View style={styles.buttons}> 
+                        <Icon name="minus-circle-outline" style={styles.icon} color={THEME.main}/>    
+                        <Icon name="plus-circle-outline" style={styles.icon} color={THEME.main}/>                      
                     </View>
-                </>
+                </View>
             )
         }
         return (
