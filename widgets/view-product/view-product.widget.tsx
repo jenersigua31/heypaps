@@ -1,15 +1,18 @@
 import React from 'react';
-import { Button, Pressable, SafeAreaView, View } from 'react-native';
+import { Button, Pressable, SafeAreaView, View, Image } from 'react-native';
 import { Icon, InputField, Screen, Text } from '../../components';
 import { THEME } from '../../constant/color.constant';
+import { iProduct } from '../../model/product.model';
 import styles from './view-product.style';
 
 
 interface iProps {
+    product: iProduct,
     onClose: () => void
 }
 
 const ViewProduct:React.FC<iProps> = ({
+    product,
     onClose
 }) => {
   return (
@@ -19,11 +22,17 @@ const ViewProduct:React.FC<iProps> = ({
                     <Icon name="close" size={30} style={styles.close}/>
                 </Pressable>
 
-                <View style={styles.image}></View>
+                <View style={styles.imageContainer}>
+                    <Image 
+                        style={styles.image}
+                        source={{uri: product.image}}
+                    />
+                </View>
 
                 <View style={styles.info}>
-                    <Text text='Product Title here' fontSize={20} bold style={styles.infoTitle}/>
-                    <Text text='500 g' bold/>
+                    <Text text={product.description} fontSize={20} bold style={styles.infoTitle}/>
+                    <Text text={product.measurement} />
+                    <Text text={'₱ '+product.price} bold/>
                     <Text text='The quick brown fox jumps over the lazy dog.The quick brown fox jumps over the lazy dog.The quick brown fox jumps over the lazy dog.' numberOfLines={3}/>
                 </View>
 

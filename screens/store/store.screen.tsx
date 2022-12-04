@@ -44,40 +44,7 @@ const StoreComponents: {
             </ScrollView>
         </View>
 	),
-	'products': (data: iGroupListItem[]) => {
-        const imageTemplate = (img: string) => { 
-            return (
-                <View style={[
-                    styles.imgTemplateContainer,
-                    // Note: remove this when product is already in the cart
-                    {
-                        justifyContent: 'flex-end',
-                    }
-                ]}> 
-                    { img && <Image
-                        style={styles.imgTemplate}
-                        source={{uri: img}}
-                    /> }
-                    <View style={[
-                        styles.buttons,
-                        // Note: remove this when product is already in the cart
-                        {
-                            width: 33,
-                            marginRight: 10
-                        }
-                    ]}> 
-                        {/* // Note: uncomment this when product is already in the cart */}
-                        {/* <Icon name="minus-circle-outline" style={styles.icon} color={THEME.main}/>  
-                        <Text text='1' bold color={TEXT.dark} fontSize={12}/>   */}
-                        <Icon name="plus-circle-outline" style={styles.icon} color={THEME.main}/>                      
-                    </View>
-                </View>
-            )
-        }
-        return (
-            <GroupList data={data} listItemImageTemplate={imageTemplate}/>
-        )
-    },
+	'products': (data: iGroupListItem[]) => {},
 }
 
 const apiConfig: iDataLoaderConfig<iProduct, iListItem, any> = {
@@ -97,9 +64,10 @@ const apiConfig: iDataLoaderConfig<iProduct, iListItem, any> = {
 }
 
 const StoreScreen = ({ route, navigation }: Props) => {
-    const [loading, setLoading] = useState(false);
-    const [viewProduct, setViewProduct] = useState(true);
+    const [loading, setLoading] = useState(false); 
+    const [selectedProduct, setSelectedProduct] = useState<iProduct>();
     const { load, list, facets } = useDataLoader(apiConfig); 
+
     
     useEffect(() => {  
         load([`store_id:=${route.params.id}`])
@@ -110,7 +78,37 @@ const StoreScreen = ({ route, navigation }: Props) => {
 	}, [facets])
 
     const onCloseHandler = () => {
-        setViewProduct(false)
+        setSelectedProduct(undefined)
+    }
+
+    const imageTemplate = (img: string) => { 
+        return (
+            <View style={[
+                styles.imgTemplateContainer,
+                // Note: remove this when product is already in the cart
+                {
+                    justifyContent: 'flex-end',
+                }
+            ]}> 
+                { img && <Image
+                    style={styles.imgTemplate}
+                    source={{uri: img}}
+                /> }
+                <View style={[
+                    styles.buttons,
+                    // Note: remove this when product is already in the cart
+                    {
+                        width: 33,
+                        marginRight: 10
+                    }
+                ]}> 
+                    {/* // Note: uncomment this when product is already in the cart */}
+                    {/* <Icon name="minus-circle-outline" style={styles.icon} color={THEME.main}/>  
+                    <Text text='1' bold color={TEXT.dark} fontSize={12}/>   */}
+                    <Icon name="plus-circle-outline" style={styles.icon} color={THEME.main}/>                      
+                </View>
+            </View>
+        )
     }
 
     const getComponentParams = (item: StoreComponent) => {
@@ -150,6 +148,22 @@ const StoreScreen = ({ route, navigation }: Props) => {
         }
     }
 
+    const onSelectProduct = (item: iListItem) => {
+        // setViewProduct(true);
+        const selected = (list as iProduct[]).find( p => p.id == +item.id); 
+        if(!selected)return;
+        console.log(selected)
+        setSelectedProduct(selected);
+    }
+
+    const productList = () => (
+        <GroupList 
+            data={getComponentParams('products') as iGroupListItem[]} 
+            listItemImageTemplate={imageTemplate}
+            onSelect={(item) => onSelectProduct(item)}
+        />
+    )
+
     return (
             <Screen>
                 <View style={styles.container}>
@@ -165,7 +179,10 @@ const StoreScreen = ({ route, navigation }: Props) => {
                             }}
                             horizontal={false}
                             data={components}
-                            renderItem={({item}) => StoreComponents[item](getComponentParams(item)) }
+                            renderItem={({item}) => {
+                                if(item === 'products') return productList();
+                                return StoreComponents[item](getComponentParams(item));
+                            }}
                             keyExtractor={(item) => item}
                         />
                     </View>
@@ -173,9 +190,12 @@ const StoreScreen = ({ route, navigation }: Props) => {
                     <Modal
                         animationType="slide"
                         transparent={true}
-                        visible={viewProduct} 
-                    >
-                        <ViewProduct onClose={onCloseHandler}/>
+                        visible={!!selectedProduct} 
+                    >   
+                        {
+                            selectedProduct &&
+                            <ViewProduct onClose={onCloseHandler} product={selectedProduct}/>
+                        }
                     </Modal>
                 </View>
             </Screen>

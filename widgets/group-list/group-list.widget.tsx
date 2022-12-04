@@ -2,7 +2,7 @@ import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { Text } from '../../components';
 import { THEME } from '../../constant/color.constant';
-import { iGroupListItem } from '../../types/list.types';
+import { iGroupListItem, iListItem } from '../../types/list.types';
 import ListItem from '../list-item/list-item.widget';
 import List from '../list/list.widget';
 import styles from './group-list.style';
@@ -10,13 +10,21 @@ import styles from './group-list.style';
 
 interface iProps {
     data: iGroupListItem[],
-    listItemImageTemplate?: (img: string) => JSX.Element
+    listItemImageTemplate?: (img: string) => JSX.Element,
+    onSelect?: (item: iListItem) => void
 }
 
 const GroupList:React.FC<iProps> = ({
     data,
-    listItemImageTemplate
+    listItemImageTemplate,
+    onSelect
 }) => {
+
+    const onPressHandler = (item: iListItem) => {
+        if(!onSelect)return;
+        onSelect(item);
+    }
+
   return (
         <View style={styles.container}>
             { data.map( g => (
@@ -57,7 +65,8 @@ const GroupList:React.FC<iProps> = ({
                                     imageTemplate={listItemImageTemplate}
                                     display={'grid'} 
                                     title={item.title}
-                                    subTitle={item.subTitle}	 
+                                    subTitle={item.subTitle}	
+                                    onPress={ () => onPressHandler(item)} 
                                 /> 
                             ))
                         }

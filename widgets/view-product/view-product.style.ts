@@ -10,12 +10,17 @@ const styles = StyleSheet.create({
     close: {
         marginBottom: 10
     },
-    image: {
+    imageContainer: {
         width: Dimensions.get('window').width - 42,
         height: Dimensions.get('window').width - 42,
         backgroundColor: '#eee',
         alignSelf: 'center',
         marginBottom: 10
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'contain'
     },
     info: {
         flex:1
