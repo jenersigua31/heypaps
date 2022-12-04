@@ -26,7 +26,7 @@ const HomeCategories:React.FC<iProps> = ({
     }
 
     return (
-        <CategoryList data={data} itemBackground='#eee' onSelect={onSelectHandler}/>
+        <CategoryList data={data} itemBackground='#fff' onSelect={onSelectHandler}/>
     );
 }
 
