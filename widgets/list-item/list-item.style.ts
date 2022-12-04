@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { BACKGROUND } from '../../constant/color.constant';
 
 const styles = StyleSheet.create({
@@ -10,14 +10,13 @@ const styles = StyleSheet.create({
     },
     image: {
         backgroundColor: '#fff',
-        height: 100,
+        width: (Dimensions.get('window').width / 2) - 10,
+        height: (Dimensions.get('window').width / 2) - 10,
         marginBottom:5,
         alignItems: 'center',
         justifyContent: 'center'
     },
     imageList: {
-        width:80,
-        height: 80,
         marginRight: 10
     },
     text: {}
