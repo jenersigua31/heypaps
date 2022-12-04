@@ -8,7 +8,7 @@ import { TouchableOpacity, View, ViewStyle} from 'react-native';
 import styles from './category-list.style';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '../../components';
-import { TEXT } from '../../constant/color.constant';
+import { TEXT, THEME } from '../../constant/color.constant';
 
 interface iCategory {
     label: string,
@@ -18,14 +18,16 @@ interface iCategory {
 interface iProps {
     data: iCategory[],
     itemBackground?: string,
-    onSelect?: (category: iCategory) => void
+    onSelect?: (category: iCategory) => void,
+    textOnly?: boolean
 }
 
 
-const HomeCategories:React.FC<iProps> = ({
+const CategoryList:React.FC<iProps> = ({
     data,
     itemBackground,
-    onSelect
+    onSelect,
+    textOnly = false
 }) => {
 
     const onSelectHandler = (category: iCategory) => {
@@ -40,11 +42,19 @@ const HomeCategories:React.FC<iProps> = ({
             justifyContent: is ? 'center': 'flex-start'
         } as ViewStyle
 
-        const item = {
+        let item = {
             backgroundColor: itemBackground || '#fff',
             marginRight: index === (itemsCount - 1) ? 0 : 10,
             width: is ? `22%` : 70
-        } as ViewStyle
+        } as ViewStyle;
+
+        if(textOnly) {
+            item = {
+                ...item,
+                ...styles.categoryTextOnly,
+                marginRight: 10
+            }
+        }
 
         return {
             item,
@@ -72,4 +82,4 @@ const HomeCategories:React.FC<iProps> = ({
 }
 
 
-export default HomeCategories;
+export default CategoryList;

@@ -18,39 +18,7 @@ import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant';
 import { iCategory } from '../home/home-categories.component';
 import { THEME } from '../../constant/color.constant';
 
-
-const PRODUCTS = [
-	{ id: '1', title: ['P 110', 'Product Title'], subTitle: ['500 g'], image: 'IMG' },
-    { id: '2', title: ['P 500', 'Product Title'], subTitle: ['500 g'] },
-    { id: '3', title: ['P 500', 'Product Title'], subTitle: ['500 g'] },
-    { id: '4', title: ['P 500', 'Product Title'], subTitle: ['500 g'] }
-];
-
-const PRODUCT_GROUP = [
-    {
-        id: '1',
-        labelLeft: {
-            text: 'Beverages',
-            icon: 'chevron-right'
-        },
-        labelRight: {
-            text: 'View all'
-        },
-        list: PRODUCTS
-    },
-    {
-        id: '2',
-        labelLeft: {
-            text: 'Noodles',
-            icon: 'chevron-right'
-        },
-        labelRight: {
-            text: 'View all'
-        },
-        list: PRODUCTS
-    }
-]
-
+ 
 interface iProps {
     
 }
@@ -72,7 +40,7 @@ const StoreComponents: {
 		<View style={styles.categories}>
             <Text text='Categories' fontSize={14} bold icon='chevron-right'/>
             <ScrollView horizontal={true} style={styles.scroll}>
-                <CategoryList data={facets}/>
+                <CategoryList data={facets} textOnly/>
             </ScrollView>
         </View>
 	),
@@ -109,8 +77,7 @@ const apiConfig: iDataLoaderConfig<iProduct, iListItem, any> = {
         per_page: 200
 	},
     facetItem: item => ({
-       label: item,
-       icon: CATEGORY_ICON_MAPPING[item]
+       label: item
     })
 }
 

@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native'; 
-import { BACKGROUND } from '../../constant/color.constant';
+import { BACKGROUND, THEME } from '../../constant/color.constant';
 
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'center', 
-        paddingVertical:5
+        paddingVertical:5, 
     },
     category: {  
         padding: 10,
@@ -18,7 +18,16 @@ const styles = StyleSheet.create({
         shadowOpacity:.4,
         elevation: 3,
     },
-    
+    categoryTextOnly: {  
+        width: 'auto',
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+        borderWidth: 1,
+        borderColor: THEME.main,
+        borderRadius:20,
+        elevation: 0,
+        shadowOpacity: 0
+    }
 
 });
 
