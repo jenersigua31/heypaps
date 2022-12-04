@@ -40,15 +40,20 @@ const styles = StyleSheet.create({
         shadowColor: '#333',
         shadowOpacity:.2,
         elevation: 3,
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
-    imgTemplate: {
+    imgWrapper: {
         position:'absolute',
         top:0,
         left:0,
         width: '100%',
         height: '100%',
-        resizeMode: 'contain'
+        padding: 15
+    },
+    img: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'contain',
     },
     buttons: {
         backgroundColor: '#fff',

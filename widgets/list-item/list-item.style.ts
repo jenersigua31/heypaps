@@ -2,16 +2,15 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { BACKGROUND } from '../../constant/color.constant';
 
 const styles = StyleSheet.create({
-    container: {
-        // width:'100%',
+    container: { 
+        alignItems:"center"
     },
-    containerList: {
-        flexDirection: 'row'
+    containerList: { 
     },
     imageContainer: {
         backgroundColor: '#fff',
-        width: (Dimensions.get('window').width / 2) - 12,
-        height: (Dimensions.get('window').width / 2) - 12,
+        width: (Dimensions.get('window').width / 2) - 40,
+        height: (Dimensions.get('window').width / 2) - 40,
         marginBottom:5,
         alignItems: 'center',
         justifyContent: 'center',
@@ -21,6 +20,7 @@ const styles = StyleSheet.create({
         shadowColor: '#333',
         shadowOpacity:.2,
         elevation: 3,
+        // padding: 15
     },
     image: {
         width: '100%', 
@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     text: {
-        marginTop: 5
+        marginTop: 5,
+        width: (Dimensions.get('window').width / 2) - 40,
     }
 });
 

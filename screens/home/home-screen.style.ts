@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
 
     storeNearLabel:{
         marginHorizontal:10,
+        marginBottom: 10
     },
 
     spacer: {

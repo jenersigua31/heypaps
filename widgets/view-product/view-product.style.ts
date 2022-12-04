@@ -15,7 +15,8 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').width - 42,
         backgroundColor: '#eee',
         alignSelf: 'center',
-        marginBottom: 10
+        marginBottom: 10,
+        padding: 20
     },
     image: {
         width: '100%',

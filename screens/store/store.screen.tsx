@@ -90,10 +90,14 @@ const StoreScreen = ({ route, navigation }: Props) => {
                     justifyContent: 'flex-end',
                 }
             ]}> 
-                { img && <Image
-                    style={styles.imgTemplate}
-                    source={{uri: img}}
-                /> }
+                { img && (
+                    <View style={styles.imgWrapper}>
+                        <Image
+                            style={styles.img}
+                            source={{uri: img}}
+                        />
+                    </View>
+                )}
                 <View style={[
                     styles.buttons,
                     // Note: remove this when product is already in the cart
