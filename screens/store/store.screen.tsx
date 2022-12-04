@@ -16,7 +16,7 @@ import useDataLoader, { iDataLoaderConfig } from '../../hooks/useDataLoader';
 import { iGroupListItem, iListItem } from '../../types/list.types';
 import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant';
 import { iCategory } from '../home/home-categories.component';
-import { THEME } from '../../constant/color.constant';
+import { TEXT, THEME } from '../../constant/color.constant';
 
  
 interface iProps {
@@ -47,13 +47,28 @@ const StoreComponents: {
 	'products': (data: iGroupListItem[]) => {
         const imageTemplate = (img: string) => { 
             return (
-                <View style={styles.imgTemplateContainer}> 
+                <View style={[
+                    styles.imgTemplateContainer,
+                    // Note: remove this when product is already in the cart
+                    {
+                        justifyContent: 'flex-end',
+                    }
+                ]}> 
                     { img && <Image
                         style={styles.imgTemplate}
                         source={{uri: img}}
                     /> }
-                    <View style={styles.buttons}> 
-                        <Icon name="minus-circle-outline" style={styles.icon} color={THEME.main}/>    
+                    <View style={[
+                        styles.buttons,
+                        // Note: remove this when product is already in the cart
+                        {
+                            width: 33,
+                            marginRight: 10
+                        }
+                    ]}> 
+                        {/* // Note: uncomment this when product is already in the cart */}
+                        {/* <Icon name="minus-circle-outline" style={styles.icon} color={THEME.main}/>  
+                        <Text text='1' bold color={TEXT.dark} fontSize={12}/>   */}
                         <Icon name="plus-circle-outline" style={styles.icon} color={THEME.main}/>                      
                     </View>
                 </View>
@@ -83,7 +98,7 @@ const apiConfig: iDataLoaderConfig<iProduct, iListItem, any> = {
 
 const StoreScreen = ({ route, navigation }: Props) => {
     const [loading, setLoading] = useState(false);
-    const [viewProduct, setViewProduct] = useState(false);
+    const [viewProduct, setViewProduct] = useState(true);
     const { load, list, facets } = useDataLoader(apiConfig); 
     
     useEffect(() => {  

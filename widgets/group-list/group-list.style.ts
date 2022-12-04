@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,     
     },
     scroll: { 
+        paddingTop: 5
     },
     product: {
         marginRight:15

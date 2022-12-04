@@ -33,7 +33,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         position:'relative',
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+
+        borderRadius: 12,
+        shadowOffset: { width: 1, height: 1 },
+        shadowColor: '#333',
+        shadowOpacity:.2,
+        elevation: 3,
+        overflow: 'hidden'
     },
     imgTemplate: {
         position:'absolute',
@@ -44,19 +51,18 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     buttons: {
-        // position:'absolute',
-        // top:0,
-        // left:0,
-        // backgroundColor: '#eee',
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'center',
-        padding: 10
-    },
-    icon: {
-        marginHorizontal: 10,
         backgroundColor: '#fff',
-        borderRadius: 15
+        borderWidth: 1,
+        borderColor: THEME.main,
+        borderRadius: 8, 
+        flexDirection: 'row',
+        width: '80%',
+        justifyContent: 'space-between',
+        padding: 5,
+        marginBottom: 10
+    },
+    icon: { 
+        backgroundColor: '#fff'
     }
 
 });
