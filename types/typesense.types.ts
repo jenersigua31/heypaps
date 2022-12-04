@@ -8,7 +8,8 @@ export interface iTypeSenseSearchParams {
     facet_by?: string,
     max_hits?: number,
     max_candidates?: number,
-    exhaustive_search?: boolean
+    exhaustive_search?: boolean,
+    per_page?: number
 }
 
 export interface iTypeSenseResponse<T>{

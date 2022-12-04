@@ -104,8 +104,9 @@ const apiConfig: iDataLoaderConfig<iProduct, iListItem, any> = {
 		query_by: 'code',
 		exhaustive_search:true,
 		max_candidates: 1000,
-		max_hits: 15,
-		facet_by: 'category'			
+		// max_hits: 100,
+		facet_by: 'category',
+        per_page: 200
 	},
     facetItem: item => ({
        label: item,
