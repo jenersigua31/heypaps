@@ -40,7 +40,9 @@ const List:React.FC<iProps> = ({
         // fix layout issue on 2 columns then 1 item
         const isAppendPlaceHolder = (data || []).length === 1 && column > 1;
         if(!isAppendPlaceHolder)return data; 
-        return [ ...data, {} as any ];
+        return [ ...data, {
+            placeHolder:true
+        } as any ];
     }
 
     return (
@@ -60,6 +62,7 @@ const List:React.FC<iProps> = ({
                 data={finalData()}
                 renderItem={({item}) => (
                     <ListItem
+                        placeHolder={item.placeHolder}
                         onPress={() => onSelect && onSelect(item)}
                         image={item.image}
                         display={display()}

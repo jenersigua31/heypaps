@@ -12,6 +12,7 @@ interface iProps {
 	subTitle?: string[],
 	display?: 'grid' | 'list',
 	horizontalView?: boolean,
+	placeHolder?: boolean,
 	imageTemplate?: (img: string) => JSX.Element,
 	onPress?: () => void
 }
@@ -23,6 +24,7 @@ const ListItem:React.FC<iProps> = ({
 	subTitle = [],
 	display = 'grid',
 	horizontalView = false,
+	placeHolder = false,
 	imageTemplate,
 	onPress
 }) => {
@@ -45,8 +47,30 @@ const ListItem:React.FC<iProps> = ({
 		}
 	}
 
+	const onPressHandler = () => {
+		if(placeHolder || !onPress)return;
+		onPress()
+	}
+
+	const containerStyle = () => {
+		let s = {
+			...styles.container,
+			...style,
+			...listStyle().container
+		}
+
+		if(placeHolder){
+			s ={
+				...s,
+				opacity: 0
+			}
+		}
+
+		return s;
+	}
+
 	return (
-			<TouchableOpacity style={[styles.container, style, listStyle().container]} onPress={onPress}>
+			<TouchableOpacity style={containerStyle()} onPress={onPressHandler}>
 				<View style={[styles.imageContainer, listStyle().imageContainer]}>
 					{
 						imageTemplate ? 
