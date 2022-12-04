@@ -9,7 +9,7 @@ const TEXT = {
 
 const BACKGROUND = {
     dark: '#333',
-    light: '#eee'
+    light: '#fafafa'
 }
 
 export {

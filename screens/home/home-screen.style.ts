@@ -4,7 +4,7 @@ import { BACKGROUND } from '../../constant/color.constant';
 const styles = StyleSheet.create({
     container: {
         flex:1,
-        backgroundColor:'#fff'
+        backgroundColor:BACKGROUND.light
     },
     search: {
         paddingHorizontal: 50,

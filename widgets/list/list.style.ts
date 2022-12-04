@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent:'space-between',
-        backgroundColor: '#fff'
+        backgroundColor: BACKGROUND.light
     },
     store: {
         width:'50%',
