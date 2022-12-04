@@ -8,18 +8,38 @@ const styles = StyleSheet.create({
     containerList: {
         flexDirection: 'row'
     },
-    image: {
+    imageContainer: {
         backgroundColor: '#fff',
-        width: (Dimensions.get('window').width / 2) - 10,
-        height: (Dimensions.get('window').width / 2) - 10,
+        width: (Dimensions.get('window').width / 2) - 12,
+        height: (Dimensions.get('window').width / 2) - 12,
         marginBottom:5,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderRadius: 12,
+
+        shadowOffset: { width: 1, height: 1 },
+        shadowColor: '#333',
+        shadowOpacity: .2,
+        elevation: 3,
+    },
+    image: {
+        width: '100%', 
+        height: '100%', 
+        resizeMode: 'contain',
+
+
+
+        borderRadius: 12,
+        overflow:'hidden',
     },
     imageList: {
+        width:80,
+        height: 80,
         marginRight: 10
     },
-    text: {}
+    text: {
+        marginTop: 5
+    }
 });
 
 export default styles;

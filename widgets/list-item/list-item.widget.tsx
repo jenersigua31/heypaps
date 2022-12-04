@@ -29,35 +29,34 @@ const ListItem:React.FC<iProps> = ({
 		if(display === 'grid')return {};
 		return {
 			container: styles.containerList,
-			image: styles.imageList
+			imageContainer: styles.imageList
 		}
 	}
 
 	return (
 			<TouchableOpacity style={[styles.container, style, listStyle().container]} onPress={onPress}>
-				<View style={[styles.image, listStyle().image]}>
+				<View style={[styles.imageContainer, listStyle().imageContainer]}>
 					{
 						imageTemplate ? 
 						imageTemplate(image || '') 
 						: 
 						<Image
-							style={{width: '100%', height: '100%', resizeMode: 'contain'}}
+							style={styles.image}
 							source={{uri: image}}
 						/>
-					}
-						
+					} 	
 				</View>
 				
 				<View style={styles.text}>
 					{
 						title.map( (t,i) => (
-							<Text key={i} text={t} color={TEXT.dark} fontSize={12} bold/>
+							<Text key={i} text={t} color={TEXT.dark} fontSize={14} bold/>
 						))
 					}
 					
 					{
 						subTitle.map( (t,i) => (
-							<Text key={i} text={t} color={TEXT.light} fontSize={10} bold/>
+							<Text key={i} text={t} color={TEXT.light} fontSize={12} bold/>
 						))
 					}
 				</View> 
