@@ -39,7 +39,7 @@ const StoreComponents: {
 	'categories': (facets: iCategory[]) => (
 		<View style={styles.categories}>
             <Text text='Categories' fontSize={14} bold icon='chevron-right'/>
-            <ScrollView horizontal={true} style={styles.scroll}>
+            <ScrollView horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
                 <CategoryList data={facets} textOnly/>
             </ScrollView>
         </View>

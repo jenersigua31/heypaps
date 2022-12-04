@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, TouchableOpacity, View, ViewStyle} from 'react-native';
+import { Image, TouchableOpacity, View, ViewStyle, Dimensions} from 'react-native';
 import { Text } from '../../components';
 import { TEXT } from '../../constant/color.constant';
 import styles from './list-item.style';
@@ -11,6 +11,7 @@ interface iProps {
 	title: string[],
 	subTitle?: string[],
 	display?: 'grid' | 'list',
+	horizontalView?: boolean,
 	imageTemplate?: (img: string) => JSX.Element,
 	onPress?: () => void
 }
@@ -21,12 +22,23 @@ const ListItem:React.FC<iProps> = ({
 	title = [],
 	subTitle = [],
 	display = 'grid',
+	horizontalView = false,
 	imageTemplate,
 	onPress
 }) => {
 
+	const dim = (Dimensions.get('window').width / 3) + 12;
 	const listStyle = () => {
-		if(display === 'grid')return {};
+		if(horizontalView){
+			return {
+				imageContainer: {
+					width: dim,
+					height: dim
+				}
+			}
+		}
+
+		if(display === 'grid')return {};		
 		return {
 			container: styles.containerList,
 			imageContainer: styles.imageList
@@ -47,7 +59,7 @@ const ListItem:React.FC<iProps> = ({
 					} 	
 				</View>
 				
-				<View style={styles.text}>
+				<View style={[styles.text, horizontalView ? {width: dim} : {}]}>
 					{
 						title.map( (t,i) => (
 							<Text key={i} text={t} color={TEXT.dark} fontSize={14} bold/>

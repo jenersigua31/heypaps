@@ -3,7 +3,7 @@ import { BACKGROUND } from '../../constant/color.constant';
 
 const styles = StyleSheet.create({
     container: {
-        width:'100%',
+        // width:'100%',
     },
     containerList: {
         flexDirection: 'row'
