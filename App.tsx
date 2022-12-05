@@ -15,6 +15,7 @@ import { RootStackParamList } from './types/rootStackParamList';
 import SearchScreen from './screens/search/search.screen';
 import LocalScreen from './screens/location/location.screen';
 import StoreScreen from './screens/store/store.screen';
+import ViewAllScreen from './screens/view-all/view-all.screen';
 
 const { Navigator, Screen: NavScreen } = createStackNavigator<RootStackParamList>(); 
 
@@ -33,6 +34,7 @@ export default function App() {
 				<NavScreen name={Screen.Search} component={SearchScreen}></NavScreen>
 				<NavScreen name={Screen.Location} component={LocalScreen}></NavScreen>
 				<NavScreen name={Screen.Store} component={StoreScreen}></NavScreen>
+				<NavScreen name={Screen.ViewAll} component={ViewAllScreen}></NavScreen>
 				<NavScreen
 					name="HomeNavigation"
 					component={AppNavigation}

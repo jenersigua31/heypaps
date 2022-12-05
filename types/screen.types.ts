@@ -8,7 +8,8 @@ enum Screen {
     Category = 'Category',
     Search = 'Search',
     Location = 'Location',
-    Store = 'Store'
+    Store = 'Store',
+    ViewAll = 'ViewAll'
 }
 
 interface iScreen {

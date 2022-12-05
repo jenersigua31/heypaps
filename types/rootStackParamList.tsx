@@ -14,5 +14,8 @@ export type RootStackParamList = {
 	[Screen.Search]: {},
 	[Screen.Location]: {},
 	[Screen.Store]: iStore,
+	[Screen.ViewAll]: {
+		title: string
+	},
 	'HomeNavigation': {};
 };

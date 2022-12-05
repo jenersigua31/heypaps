@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from '../../components';
 import { THEME } from '../../constant/color.constant';
 import { iGroupListItem, iListItem } from '../../types/list.types';
@@ -11,18 +12,25 @@ import styles from './group-list.style';
 interface iProps {
     data: iGroupListItem[],
     listItemImageTemplate?: (img: string) => JSX.Element,
-    onSelect?: (item: iListItem) => void
+    onSelect?: (item: iListItem) => void,
+    onAction?:(action: string, data: string) => void
 }
 
 const GroupList:React.FC<iProps> = ({
     data,
     listItemImageTemplate,
-    onSelect
+    onSelect,
+    onAction
 }) => {
 
     const onPressHandler = (item: iListItem) => {
         if(!onSelect)return;
         onSelect(item);
+    }
+
+    const onActionHandler = (action?: string, data?: string) => {
+        if(!onAction || !action)return;
+        onAction(action,data || '')
     }
 
   return (
@@ -40,13 +48,15 @@ const GroupList:React.FC<iProps> = ({
                         
                         {
                             g.labelRight && 
-                            <Text 
-                                text={g.labelRight.text} 
-                                icon={g.labelRight.icon}  
-                                bold
-                                fontSize={14}
-                                color={THEME.main}
-                            />
+                            <TouchableOpacity onPress={() => onActionHandler(g.labelRight?.text, g.labelLeft?.text)}>
+                                <Text 
+                                    text={g.labelRight.text} 
+                                    icon={g.labelRight.icon}  
+                                    bold
+                                    fontSize={14}
+                                    color={THEME.main}
+                                />
+                            </TouchableOpacity>
                         }
                     </View>
                     

@@ -1,4 +1,4 @@
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useState, useRef, useEffect} from 'react';
 import { FlatList, Image, Modal, ScrollView, View } from 'react-native';
@@ -36,14 +36,7 @@ const StoreComponents: {
             <Text text={store.address} fontSize={14}/>
         </View>
     ),
-	'categories': (facets: iCategory[]) => (
-		<View style={styles.categories}>
-            <Text text='Categories' fontSize={14} bold icon='chevron-right'/>
-            <ScrollView horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
-                <CategoryList data={facets} textOnly/>
-            </ScrollView>
-        </View>
-	),
+	'categories': (facets: iCategory[]) => {},
 	'products': (data: iGroupListItem[]) => {},
 }
 
@@ -67,6 +60,7 @@ const StoreScreen = ({ route, navigation }: Props) => {
     const [loading, setLoading] = useState(false); 
     const [selectedProduct, setSelectedProduct] = useState<iProduct>();
     const { load, list, facets } = useDataLoader(apiConfig); 
+    const {navigate} = useNavigation();
 
     
     useEffect(() => {  
@@ -160,12 +154,32 @@ const StoreScreen = ({ route, navigation }: Props) => {
         setSelectedProduct(selected);
     }
 
+    const onActionHandler = (action: string, data: string) => {    
+        navigate(ScreenType.ViewAll as never, {
+            title: data
+        } as never)
+    }
+
     const productList = () => (
         <GroupList 
+            onAction={onActionHandler}
             data={getComponentParams('products') as iGroupListItem[]} 
             listItemImageTemplate={imageTemplate}
             onSelect={(item) => onSelectProduct(item)}
         />
+    )
+
+    const onSelectCategory = (cat: iCategory) => {
+        onActionHandler('View All', cat.label)
+    }
+
+    const categories = () => (
+        <View style={styles.categories}>
+            <Text text='Categories' fontSize={14} bold icon='chevron-right'/>
+            <ScrollView horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
+                <CategoryList data={facets as iCategory[]} textOnly onSelect={onSelectCategory}/>
+            </ScrollView>
+        </View>
     )
 
     return (
@@ -185,6 +199,8 @@ const StoreScreen = ({ route, navigation }: Props) => {
                             data={components}
                             renderItem={({item}) => {
                                 if(item === 'products') return productList();
+                                if(item === 'categories') return categories()
+
                                 return StoreComponents[item](getComponentParams(item));
                             }}
                             keyExtractor={(item) => item}

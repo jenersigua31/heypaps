@@ -37,6 +37,9 @@ const SCREEN: {
     'Store':{
         name: Screen.Store
     },
+    'ViewAll':{
+        name: Screen.ViewAll
+    },
 }
 
 
