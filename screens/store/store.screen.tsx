@@ -141,27 +141,39 @@ const StoreScreen = ({ route, navigation }: Props) => {
         } as never)
     }
 
-    const productList = () => (
-        <GroupList 
-            onAction={onActionHandler}
-            data={getComponentParams('products') as iGroupListItem[]} 
-            listItemImageTemplate={productThumbnail}
-            // onSelect={(item) => onSelectProduct(item)}
-        />
+    const noResultTemplate = () => (
+        <View style={styles.noResult}>
+            <Text text='No results found!'/>
+        </View>
     )
+    const productList = () => {
+        if(!(list || []).length)return noResultTemplate();
+        const data = getComponentParams('products') as iGroupListItem[];        
+        return (
+            <GroupList 
+                onAction={onActionHandler}
+                data={data} 
+                listItemImageTemplate={productThumbnail}
+                // onSelect={(item) => onSelectProduct(item)}
+            />
+        )
+    }
 
     const onSelectCategory = (cat: iCategory) => {
         onActionHandler('View All', cat.label)
     }
 
-    const categories = () => (
-        <View style={styles.categories}>
-            <Text text='Categories' fontSize={14} bold icon='chevron-right'/>
-            <ScrollView horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
-                <CategoryList data={facets as iCategory[]} textOnly onSelect={onSelectCategory}/>
-            </ScrollView>
-        </View>
-    )
+    const categories = () => {
+        if(!(list || []).length)return <></>
+        return (
+            <View style={styles.categories}>
+                <Text text='Categories' fontSize={14} bold icon='chevron-right'/>
+                <ScrollView horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
+                    <CategoryList data={facets as iCategory[]} textOnly onSelect={onSelectCategory}/>
+                </ScrollView>
+            </View>
+        )
+    }
 
     return (
             <Screen>

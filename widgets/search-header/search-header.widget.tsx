@@ -16,10 +16,7 @@ const SearchHeader:React.FC<iProps> = ({
   const timerRef = useRef<any>();
 
   const onSearchHandler = (value: any) => {
-    if(timerRef.current)clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
       onSearch(value);
-    }, 1000);
   }
 
   return (
