@@ -65,13 +65,9 @@ const StoreScreen = ({ route, navigation }: Props) => {
     const [searchKey, setSearchKey] = useState<any>('');
     const {navigate} = useNavigation();
 
-    
-    useEffect(() => {  
-        load([`store_id:=${route.params.id}`])
-	}, []);
-
     useEffect(() => { 
-		const filter = !!searchKey.length ? [`description:${searchKey}`,`store_id:=${route.params.id}`]: undefined;
+		const filter = [`store_id:=${route.params.id}`];
+        if(!!searchKey.length)filter.push(`description:${searchKey}`);
 		load(filter)
 	}, [searchKey])
     

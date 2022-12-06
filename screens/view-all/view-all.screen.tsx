@@ -41,14 +41,11 @@ const ViewAllScreen = ({ route, navigation }: Props) => {
   const [searchKey, setSearchKey] = useState<any>('');
   const [selectedProduct, setSelectedProduct] = useState<iProduct>();
 
-  useEffect(() => {  
-      load([`category:=${route.params.title}`, ])
-  }, []);
-
   useEffect(() => { 
-		const filter = !!searchKey.length ? [`description:${searchKey}`,`category:=${route.params.title}`]: undefined;
-    load(filter)
-	}, [searchKey])
+      const filter = [`category:=${route.params.title}`];
+      if(!!searchKey.length)filter.push(`description:${searchKey}`);
+      load(filter)
+  }, [searchKey])
 
   const mapItem = (item: any) => ({
     id: item.id,
