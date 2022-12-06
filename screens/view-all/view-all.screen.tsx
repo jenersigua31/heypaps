@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View} from 'react-native';
+import { FlatList, Modal, View} from 'react-native';
 import Screen from '../../components/screen/screen.component';
 import SearchHeader from '../../widgets/search-header/search-header.widget';
 import styles from './view-all.style';
@@ -10,7 +10,9 @@ import { Screen as ScreenType} from '../../types/screen.types';
 import useDataLoader, { iDataLoaderConfig } from '../../hooks/useDataLoader';
 import { iProduct } from '../../model/product.model';
 import { iListItem } from '../../types/list.types';
-import { List } from '../../widgets'; 
+import { List, ViewProduct } from '../../widgets'; 
+import ProductThumbnail from '../../widgets/product-thumbnail/product-thumbnail.widget';
+import { iProductThumbnail } from '../../types/product-thumbnail.interface';
 
 type Props = NativeStackScreenProps<RootStackParamList, ScreenType.ViewAll>;
 
@@ -30,10 +32,13 @@ const apiConfig: iDataLoaderConfig<iProduct, iListItem, any> = {
     })
 }
 
+
+
 const ViewAllScreen = ({ route, navigation }: Props) => {
 
   const [loading, setLoading] = useState(false);
   const { load, list, facets } = useDataLoader(apiConfig); 
+  const [selectedProduct, setSelectedProduct] = useState<iProduct>();
 
   useEffect(() => {  
       load([`category:=${route.params.title}`])
@@ -44,7 +49,25 @@ const ViewAllScreen = ({ route, navigation }: Props) => {
     title: [item.description],
     subTitle: [ `₱ ${item.price}` ],
     image: item.image
-});
+  });
+
+  const onCloseHandler = () => {
+      setSelectedProduct(undefined)
+  }
+  
+  const onSelectProductHandler = (id: number) => {
+    const selected = (list as iProduct[]).find( p => p.id == id); 
+    if(!selected)return; 
+    setSelectedProduct(selected);
+  }
+  
+  const productThumbnail = (data: iProductThumbnail) => (
+    <ProductThumbnail 
+      image={data.image as string} 
+      id={data.id}
+      onSelect={onSelectProductHandler}  
+    />
+  )
 
   return (
         <Screen>
@@ -67,13 +90,22 @@ const ViewAllScreen = ({ route, navigation }: Props) => {
                             renderItem={({item}) => {
                                 // if(item === 'products') return productList();
                                 // return StoreComponents[item](getComponentParams(item));
-                                return <List id="viewall" data={list.map(mapItem)} column={2}/>
+                                return <List id="viewall" data={list.map(mapItem)} column={2} listItemImageTemplate={productThumbnail}/>
                             }}
                             keyExtractor={(item) => item}
                     />
                 </View>
               }
-
+              <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={!!selectedProduct} 
+              >   
+                  {
+                      selectedProduct &&
+                      <ViewProduct onClose={onCloseHandler} product={selectedProduct}/>
+                  }
+              </Modal>
                         
             </View>
         </Screen>

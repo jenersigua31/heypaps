@@ -1,5 +1,5 @@
 export interface iListItem { 
-    id: string, 
+    id: number, 
     title: string[], 
     subTitle: string[],
     image?: string

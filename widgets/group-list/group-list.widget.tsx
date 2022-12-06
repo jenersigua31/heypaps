@@ -11,7 +11,7 @@ import styles from './group-list.style';
 
 interface iProps {
     data: iGroupListItem[],
-    listItemImageTemplate?: (img: string) => JSX.Element,
+    listItemImageTemplate?: (data: {image?: string, id: number}) => JSX.Element,
     onSelect?: (item: iListItem) => void,
     onAction?:(action: string, data: string) => void
 }
@@ -68,6 +68,7 @@ const GroupList:React.FC<iProps> = ({
                         {
                             g.list.map(item => (
                                 <ListItem  
+                                    id={item.id}
                                     horizontalView={true}
                                     image={item.image}
                                     style={styles.product}

@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
+import { THEME } from '../../constant/color.constant';
 
 const styles = StyleSheet.create({
     container: {
-        
+        flex: 1,
     },
     title: {
         paddingHorizontal:10,
@@ -10,7 +11,8 @@ const styles = StyleSheet.create({
     },
     list: {
         paddingTop: 15,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        flex:1
     }
 });
 

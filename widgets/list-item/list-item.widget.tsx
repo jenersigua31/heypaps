@@ -2,10 +2,12 @@ import React from 'react';
 import { Image, TouchableOpacity, View, ViewStyle, Dimensions} from 'react-native';
 import { Text } from '../../components';
 import { TEXT } from '../../constant/color.constant';
+import { iProductThumbnail } from '../../types/product-thumbnail.interface';
 import styles from './list-item.style';
 
 
 interface iProps {
+	id: number,
 	style?: ViewStyle,
 	image?: string,
 	title: string[],
@@ -13,11 +15,12 @@ interface iProps {
 	display?: 'grid' | 'list',
 	horizontalView?: boolean,
 	placeHolder?: boolean,
-	imageTemplate?: (img: string) => JSX.Element,
+	imageTemplate?: (data: iProductThumbnail) => JSX.Element,
 	onPress?: () => void
 }
 
 const ListItem:React.FC<iProps> = ({
+	id,
 	style,
 	image,
 	title = [],
@@ -74,7 +77,7 @@ const ListItem:React.FC<iProps> = ({
 				<View style={[styles.imageContainer, listStyle().imageContainer]}>
 					{
 						imageTemplate ? 
-						imageTemplate(image || '') 
+						imageTemplate({id, image}) 
 						: 
 						<Image
 							style={styles.image}

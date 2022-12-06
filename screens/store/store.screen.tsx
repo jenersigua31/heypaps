@@ -17,6 +17,8 @@ import { iGroupListItem, iListItem } from '../../types/list.types';
 import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant';
 import { iCategory } from '../home/home-categories.component';
 import { TEXT, THEME } from '../../constant/color.constant';
+import ProductThumbnail from '../../widgets/product-thumbnail/product-thumbnail.widget';
+import { iProductThumbnail } from '../../types/product-thumbnail.interface';
 
  
 interface iProps {
@@ -75,39 +77,13 @@ const StoreScreen = ({ route, navigation }: Props) => {
         setSelectedProduct(undefined)
     }
 
-    const imageTemplate = (img: string) => { 
-        return (
-            <View style={[
-                styles.imgTemplateContainer,
-                // Note: remove this when product is already in the cart
-                {
-                    justifyContent: 'flex-end',
-                }
-            ]}> 
-                { img && (
-                    <View style={styles.imgWrapper}>
-                        <Image
-                            style={styles.img}
-                            source={{uri: img}}
-                        />
-                    </View>
-                )}
-                <View style={[
-                    styles.buttons,
-                    // Note: remove this when product is already in the cart
-                    {
-                        width: 33,
-                        marginRight: 10
-                    }
-                ]}> 
-                    {/* // Note: uncomment this when product is already in the cart */}
-                    {/* <Icon name="minus-circle-outline" style={styles.icon} color={THEME.main}/>  
-                    <Text text='1' bold color={TEXT.dark} fontSize={12}/>   */}
-                    <Icon name="plus-circle-outline" style={styles.icon} color={THEME.main}/>                      
-                </View>
-            </View>
-        )
-    }
+    const productThumbnail = (data: iProductThumbnail) => (
+        <ProductThumbnail 
+            image={data.image as string} 
+            id={data.id}
+            onSelect={onSelectProduct}    
+        />
+    )
 
     const getComponentParams = (item: StoreComponent) => {
         if(item === 'info')return route.params;
@@ -119,7 +95,7 @@ const StoreScreen = ({ route, navigation }: Props) => {
                 const products = (list as iProduct[])
                     .filter((l: iProduct) => l.category === facet)
                     .map( p => ({ 
-                        id: String(p.id), 
+                        id: p.id, 
                         title: [
                             `₱ ${p.price}`, 
                             p.description
@@ -146,11 +122,10 @@ const StoreScreen = ({ route, navigation }: Props) => {
         }
     }
 
-    const onSelectProduct = (item: iListItem) => {
+    const onSelectProduct = (id: number) => {
         // setViewProduct(true);
-        const selected = (list as iProduct[]).find( p => p.id == +item.id); 
-        if(!selected)return;
-        console.log(selected)
+        const selected = (list as iProduct[]).find( p => p.id == id); 
+        if(!selected)return; 
         setSelectedProduct(selected);
     }
 
@@ -164,8 +139,8 @@ const StoreScreen = ({ route, navigation }: Props) => {
         <GroupList 
             onAction={onActionHandler}
             data={getComponentParams('products') as iGroupListItem[]} 
-            listItemImageTemplate={imageTemplate}
-            onSelect={(item) => onSelectProduct(item)}
+            listItemImageTemplate={productThumbnail}
+            // onSelect={(item) => onSelectProduct(item)}
         />
     )
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FlatList, View} from 'react-native'; 
 import { Spacer, Text } from '../../components';
+import { iProductThumbnail } from '../../types/product-thumbnail.interface';
 import ListItem from '../list-item/list-item.widget';
 import styles from './list.style';
 
@@ -16,7 +17,7 @@ interface iProps {
     data: iListItem[],
     column?: number,
     image?: string,
-    listItemImageTemplate?: (img: string) => JSX.Element,
+    listItemImageTemplate?: (data: iProductThumbnail) => JSX.Element,
 
     onSelect?: (data: iListItem) => void
 }
@@ -62,6 +63,7 @@ const List:React.FC<iProps> = ({
                 data={finalData()}
                 renderItem={({item}) => (
                     <ListItem
+                        id={item.id}
                         placeHolder={item.placeHolder}
                         onPress={() => onSelect && onSelect(item)}
                         image={item.image}
