@@ -67,10 +67,10 @@ const SearchScreen:React.FC<iProps> = ({}) => {
     return (
         <Screen>
             <View style={styles.container}>
-                <SearchHeader/>
+                {/* <SearchHeader/>
                 <Tab items={TAB_ITEMS} onSelect={onSelectHandler} value={selectedTab}/>
                 { selectedTab === '1' && <List id="products" data={PRODUCTS} column={2} listItemImageTemplate={imageTemplate}/> }
-                { selectedTab === '2' && <List id="stores" data={STORES} column={1}/> } 
+                { selectedTab === '2' && <List id="stores" data={STORES} column={1}/> }  */}
             </View>
         </Screen>
     );

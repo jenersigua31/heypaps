@@ -70,7 +70,7 @@ const AppText:React.FC<iProps> = ({
             marginBottom: textMargin,
             color,
             fontWeight: bold ? '700' : '300',
-            width: '100%'
+            // width: '100%'
         } as TextStyle;
 
         const icon = {

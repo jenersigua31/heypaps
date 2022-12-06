@@ -62,12 +62,18 @@ const StoreScreen = ({ route, navigation }: Props) => {
     const [loading, setLoading] = useState(false); 
     const [selectedProduct, setSelectedProduct] = useState<iProduct>();
     const { load, list, facets } = useDataLoader(apiConfig); 
+    const [searchKey, setSearchKey] = useState<any>('');
     const {navigate} = useNavigation();
 
     
     useEffect(() => {  
         load([`store_id:=${route.params.id}`])
-	}, [])
+	}, []);
+
+    useEffect(() => { 
+		const filter = !!searchKey.length ? [`description:${searchKey}`,`store_id:=${route.params.id}`]: undefined;
+		load(filter)
+	}, [searchKey])
     
     useEffect(() => {  
         console.log(facets)
@@ -160,7 +166,7 @@ const StoreScreen = ({ route, navigation }: Props) => {
     return (
             <Screen>
                 <View style={styles.container}>
-                    <SearchHeader/>
+                    <SearchHeader onSearch={setSearchKey}/>
                     <View style={styles.listContainer}>
                         <FlatList 
                             refreshing={loading}

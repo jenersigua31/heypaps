@@ -27,9 +27,9 @@ const apiConfig: iDataLoaderConfig<iProduct, iListItem, any> = {
 		facet_by: 'category',
     per_page: 200
 	},
-    facetItem: item => ({
-       label: item
-    })
+  facetItem: item => ({
+      label: item
+  })
 }
 
 
@@ -38,11 +38,17 @@ const ViewAllScreen = ({ route, navigation }: Props) => {
 
   const [loading, setLoading] = useState(false);
   const { load, list, facets } = useDataLoader(apiConfig); 
+  const [searchKey, setSearchKey] = useState<any>('');
   const [selectedProduct, setSelectedProduct] = useState<iProduct>();
 
   useEffect(() => {  
-      load([`category:=${route.params.title}`])
-  }, [])
+      load([`category:=${route.params.title}`, ])
+  }, []);
+
+  useEffect(() => { 
+		const filter = !!searchKey.length ? [`description:${searchKey}`,`category:=${route.params.title}`]: undefined;
+    load(filter)
+	}, [searchKey])
 
   const mapItem = (item: any) => ({
     id: item.id,
@@ -72,7 +78,7 @@ const ViewAllScreen = ({ route, navigation }: Props) => {
   return (
         <Screen>
             <View style={styles.container}>
-              <SearchHeader/>
+              <SearchHeader onSearch={setSearchKey}/>
               <Text text={route.params.title} fontSize={28} style={styles.title} bold/> 
               {
                 list &&
