@@ -4,7 +4,11 @@ import { THEME } from '../../constant/color.constant';
 const styles = StyleSheet.create({
     container: {
         width: '50%',
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+    },
+    containerSmall: {
+        width: 150,
+        paddingHorizontal: 10,
     },
     product: {
         backgroundColor: '#fff',
@@ -13,13 +17,17 @@ const styles = StyleSheet.create({
         // padding: 10,
         shadowOffset: { width: 1, height: 1 },
         shadowColor: '#333',
-        shadowOpacity:.2,
+        shadowOpacity:.1,
         elevation: 3,
 
         display:'flex',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        height:250
+        height:250,
+    },
+    productSmall: {
+        height:200,
+        marginVertical: 3
     },
     imageWrapper: {
         width:'100%',  
@@ -32,7 +40,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain', 
     },
     details: {
-        backgroundColor:'#f4f4f4',
+        backgroundColor:'#fff',
         width: '100%',
         paddingHorizontal: 10,
         paddingVertical: 10
@@ -60,6 +68,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    iconSmall: {
+        width: 25,
+    }
 });
 
 export default styles;

@@ -5,7 +5,7 @@ import { FlatList, Image, Modal, ScrollView, View } from 'react-native';
 import { Icon, Screen, Text } from '../../components';
 import { RootStackParamList } from '../../types/rootStackParamList';
 import { iTypeSenseSearchParams } from '../../types/typesense.types';
-import { CategoryList, GroupList, ViewProduct } from '../../widgets';
+import { CategoryList, GroupList, ProductListItem, ViewProduct } from '../../widgets';
 import SearchHeader from '../../widgets/search-header/search-header.widget';
 import { Screen as ScreenType} from '../../types/screen.types';
 import styles from './store.style';
@@ -16,9 +16,7 @@ import useDataLoader, { iDataLoaderConfig } from '../../hooks/useDataLoader';
 import { iGroupListItem, iListItem } from '../../types/list.types';
 import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant';
 import { iCategory } from '../home/home-categories.component';
-import { TEXT, THEME } from '../../constant/color.constant';
-import ProductThumbnail from '../../widgets/product-thumbnail/product-thumbnail.widget';
-import { iProductThumbnail } from '../../types/product-thumbnail.interface';
+import { TEXT, THEME } from '../../constant/color.constant';  
 
  
 interface iProps {
@@ -79,14 +77,6 @@ const StoreScreen = ({ route, navigation }: Props) => {
         setSelectedProduct(undefined)
     }
 
-    const productThumbnail = (data: iProductThumbnail) => (
-        <ProductThumbnail 
-            image={data.image as string} 
-            id={data.id}
-            onSelect={onSelectProduct}    
-        />
-    )
-
     const getComponentParams = (item: StoreComponent) => {
         if(item === 'info')return route.params;
         if(item === 'categories')return facets;
@@ -95,16 +85,7 @@ const StoreScreen = ({ route, navigation }: Props) => {
             facets.forEach( (f,i) => {
                 const facet = f.label;
                 const products = (list as iProduct[])
-                    .filter((l: iProduct) => l.category === facet)
-                    .map( p => ({ 
-                        id: p.id, 
-                        title: [
-                            `₱ ${p.price}`, 
-                            p.description
-                        ], 
-                        subTitle: [p.measurement], 
-                        image: p.image
-                    } as iListItem));
+                    .filter((l: iProduct) => l.category === facet);
 
                 productGroup.push(
                     {
@@ -124,12 +105,11 @@ const StoreScreen = ({ route, navigation }: Props) => {
         }
     }
 
-    const onSelectProduct = (id: number) => {
-        // setViewProduct(true);
-        const selected = (list as iProduct[]).find( p => p.id == id); 
+    const onSelectProductHandler = (product: iProduct) => {
+        const selected = (list as iProduct[]).find( p => p.id == product.id); 
         if(!selected)return; 
         setSelectedProduct(selected);
-    }
+      }
 
     const onActionHandler = (action: string, data: string) => {    
         navigate(ScreenType.ViewAll as never, {
@@ -149,8 +129,11 @@ const StoreScreen = ({ route, navigation }: Props) => {
             <GroupList 
                 onAction={onActionHandler}
                 data={data} 
-                listItemImageTemplate={productThumbnail}
-                // onSelect={(item) => onSelectProduct(item)}
+                renderListItem={(item) => <ProductListItem
+                    size='small'
+                    product={item}
+                    onSelect={onSelectProductHandler}
+                />}
             />
         )
     }

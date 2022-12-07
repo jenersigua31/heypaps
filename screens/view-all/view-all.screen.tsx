@@ -11,8 +11,6 @@ import useDataLoader, { iDataLoaderConfig } from '../../hooks/useDataLoader';
 import { iProduct } from '../../model/product.model';
 import { iListItem } from '../../types/list.types';
 import { List, ListView, ProductListItem, ViewProduct } from '../../widgets'; 
-import ProductThumbnail from '../../widgets/product-thumbnail/product-thumbnail.widget';
-import { iProductThumbnail } from '../../types/product-thumbnail.interface';
 import { TEXT } from '../../constant/color.constant';
 
 type Props = NativeStackScreenProps<RootStackParamList, ScreenType.ViewAll>;
@@ -59,19 +57,11 @@ const ViewAllScreen = ({ route, navigation }: Props) => {
       setSelectedProduct(undefined)
   }
   
-  const onSelectProductHandler = (id: number) => {
-    const selected = (list as iProduct[]).find( p => p.id == id); 
+  const onSelectProductHandler = (product: iProduct) => {
+    const selected = (list as iProduct[]).find( p => p.id == product.id); 
     if(!selected)return; 
     setSelectedProduct(selected);
   }
-  
-  const productThumbnail = (data: iProductThumbnail) => (
-    <ProductThumbnail 
-      image={data.image as string} 
-      id={data.id}
-      onSelect={onSelectProductHandler}  
-    />
-  )
 
   return (
         <Screen>
@@ -87,7 +77,7 @@ const ViewAllScreen = ({ route, navigation }: Props) => {
                       data={list}
                       renderListItem={(item) => <ProductListItem 
                           product={item}
-                          
+                          onSelect={onSelectProductHandler}
                       />}
                     />
                 </View>

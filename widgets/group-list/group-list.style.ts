@@ -1,11 +1,12 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { BACKGROUND } from '../../constant/color.constant';
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 10,     
+        paddingHorizontal: 10,   
+        backgroundColor: BACKGROUND.light  
     },
     scroll: { 
-        paddingTop: 5
     },
     product: {
         marginRight:15

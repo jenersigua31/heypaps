@@ -7,11 +7,13 @@ import styles from './product-list-item.style';
 
 interface iProps {
     product: iProduct,
+    size?: 'normal' | 'small',
     onSelect?: (p: iProduct) => void
 }
 
 const ProductListItem:React.FC<iProps> = ({
     product,
+    size = 'normal',
     onSelect
 }) => {
     const [quantity, setQuantity] = useState(0);
@@ -29,9 +31,23 @@ const ProductListItem:React.FC<iProps> = ({
         onSelect(p)
     }
 
+    const modifier = () => {
+        if(size==='normal')return {
+            numberOfLines: 2,
+            infoTextSize:  13
+        }
+        return {
+            container: styles.containerSmall,
+            product: styles.productSmall,
+            icon: styles.iconSmall,
+            numberOfLines: 1,
+            infoTextSize:  10,
+        }
+    }
+
     return (
-            <View style={styles.container}>
-                <View style={styles.product}>
+            <View style={[styles.container, modifier().container]} key={product.id}>
+                <View style={[styles.product, modifier().product]}>
                     <TouchableOpacity style={styles.imageWrapper} onPress={() => onSelectHandler(product)}>
                         <Image 
                             source={{uri: product.image}} 
@@ -40,22 +56,21 @@ const ProductListItem:React.FC<iProps> = ({
                     </TouchableOpacity>
                     
                     <TouchableOpacity style={styles.details} onPress={() => onSelectHandler(product)}>
-                        <Text text={product.description} fontSize={13} bold color={TEXT.dark} numberOfLines={2}/>
-                        {/* <Text text={product.measurement} fontSize={11} bold color={'#b2b2b2'}/> */}
-                        <Text text={`₱ ${product.price}`} fontSize={12} bold color={TEXT.normal}/>
+                        <Text text={product.description} fontSize={modifier().infoTextSize} bold color={TEXT.dark} numberOfLines={modifier().numberOfLines}/>
+                        <Text text={`₱ ${product.price}`} fontSize={modifier().infoTextSize} bold color={TEXT.normal}/>
                     </TouchableOpacity>
 
                     {
                         quantity > 0 &&
                         <View style={styles.cart}>
-                            <TouchableOpacity style={styles.icon}  onPress={()=>addToCart('-')}>
-                                <Icon name="minus" color={THEME.main}/>   
+                            <TouchableOpacity style={[styles.icon, modifier().icon]}  onPress={()=>addToCart('-')}>
+                                <Icon name="minus" color={THEME.main} size={12}/>   
                             </TouchableOpacity>
                             
-                            <Text text={quantity+''} bold color={TEXT.dark} fontSize={14}/> 
+                            <Text text={quantity+''} bold color={TEXT.dark} fontSize={modifier().infoTextSize}/> 
 
-                            <TouchableOpacity style={styles.icon}  onPress={()=>addToCart('+')}>
-                                <Icon name="plus" color={THEME.main}/>   
+                            <TouchableOpacity style={[styles.icon, modifier().icon]}  onPress={()=>addToCart('+')}>
+                                <Icon name="plus" color={THEME.main} size={12}/>   
                             </TouchableOpacity> 
                         </View>
                     }
@@ -65,7 +80,7 @@ const ProductListItem:React.FC<iProps> = ({
                         quantity == 0 &&
                         <View style={[styles.cart, {justifyContent: 'center'}]}>
                             <TouchableOpacity style={styles.cartAdd} onPress={()=>addToCart('+')}>
-                                <Text text='ADD' bold color={TEXT.dark} fontSize={10}/>  
+                                <Text text='ADD' color={TEXT.dark} fontSize={modifier().infoTextSize - 2}/>  
                             </TouchableOpacity>
                         </View>
                     }

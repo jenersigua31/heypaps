@@ -13,14 +13,16 @@ interface iProps {
     data: iGroupListItem[],
     listItemImageTemplate?: (data: {image?: string, id: number}) => JSX.Element,
     onSelect?: (item: iListItem) => void,
-    onAction?:(action: string, data: string) => void
+    onAction?:(action: string, data: string) => void,
+    renderListItem: (itemData: any) => JSX.Element
 }
 
 const GroupList:React.FC<iProps> = ({
     data,
     listItemImageTemplate,
     onSelect,
-    onAction
+    onAction,
+    renderListItem
 }) => {
 
     const onPressHandler = (item: iListItem) => {
@@ -40,8 +42,7 @@ const GroupList:React.FC<iProps> = ({
 
                     <View style={styles.labels}>
                         <Text 
-                            text={g.labelLeft.text} 
-                            // icon={g.labelLeft.icon}  
+                            text={g.labelLeft.text}  
                             bold
                             fontSize={15}
                         />
@@ -65,22 +66,9 @@ const GroupList:React.FC<iProps> = ({
                         showsHorizontalScrollIndicator={false}
                         style={styles.scroll}
                     >
-                        {
-                            g.list.map(item => (
-                                <ListItem  
-                                    id={item.id}
-                                    horizontalView={true}
-                                    image={item.image}
-                                    style={styles.product}
-                                    key={item.id}
-                                    imageTemplate={listItemImageTemplate}
-                                    display={'grid'} 
-                                    title={item.title}
-                                    subTitle={item.subTitle}	
-                                    onPress={ () => onPressHandler(item)} 
-                                /> 
-                            ))
-                        }
+                        { g.list.map(item => ( 
+                            renderListItem(item)
+                        )) }
                     </ScrollView>
                 </View>
             )) }

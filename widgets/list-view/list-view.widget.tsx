@@ -37,7 +37,9 @@ const ListView:React.FC<iProps> = ({
                 numColumns={column}
                 data={data}
                 renderItem={({item}) => (
-                    renderListItem(item)
+                    <React.Fragment key={item.id}>
+                        {renderListItem(item)}
+                    </React.Fragment>
                 )}
                 keyExtractor={(item) => item.id}
             />

@@ -15,5 +15,5 @@ export interface iGroupListItem {
     id: string,
     labelLeft:iGroupLabel,
     labelRight?:iGroupLabel,
-    list: iListItem[]
+    list: any[]
 }
