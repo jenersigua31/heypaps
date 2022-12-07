@@ -10,9 +10,10 @@ import { Screen as ScreenType} from '../../types/screen.types';
 import useDataLoader, { iDataLoaderConfig } from '../../hooks/useDataLoader';
 import { iProduct } from '../../model/product.model';
 import { iListItem } from '../../types/list.types';
-import { List, ViewProduct } from '../../widgets'; 
+import { List, ListView, ProductListItem, ViewProduct } from '../../widgets'; 
 import ProductThumbnail from '../../widgets/product-thumbnail/product-thumbnail.widget';
 import { iProductThumbnail } from '../../types/product-thumbnail.interface';
+import { TEXT } from '../../constant/color.constant';
 
 type Props = NativeStackScreenProps<RootStackParamList, ScreenType.ViewAll>;
 
@@ -76,26 +77,18 @@ const ViewAllScreen = ({ route, navigation }: Props) => {
         <Screen>
             <View style={styles.container}>
               <SearchHeader onSearch={setSearchKey}/>
-              <Text text={route.params.title} fontSize={28} style={styles.title} bold/> 
+              <Text text={route.params.title} fontSize={28} style={styles.title} bold color={TEXT.dark}/> 
               {
                 list &&
-                <View style={styles.list}>
-                  <FlatList 
-                            refreshing={loading}
-                            onRefresh={() => {
-                                setLoading(true);
-                                setTimeout(() => { 
-                                    setLoading(false)
-                                },2000)
-                            }}
-                            horizontal={false}
-                            data={['components']}
-                            renderItem={({item}) => {
-                                // if(item === 'products') return productList();
-                                // return StoreComponents[item](getComponentParams(item));
-                                return <List id="viewall" data={list.map(mapItem)} column={2} listItemImageTemplate={productThumbnail}/>
-                            }}
-                            keyExtractor={(item) => item}
+                <View style={styles.list}> 
+                    <ListView
+                      column={2}
+                      id="product-view-all"
+                      data={list}
+                      renderListItem={(item) => <ProductListItem 
+                          product={item}
+                          
+                      />}
                     />
                 </View>
               }

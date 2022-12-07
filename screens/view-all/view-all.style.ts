@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { THEME } from '../../constant/color.constant';
+import { BACKGROUND, THEME } from '../../constant/color.constant';
 
 const styles = StyleSheet.create({
     container: {
@@ -9,9 +9,8 @@ const styles = StyleSheet.create({
         paddingHorizontal:10,
         marginBottom: 10
     },
-    list: {
-        paddingTop: 15,
-        backgroundColor: '#fff',
+    list: { 
+        backgroundColor: BACKGROUND.light,
         flex:1
     }
 });
