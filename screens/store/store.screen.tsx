@@ -1,24 +1,21 @@
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useState, useRef, useEffect} from 'react';
 import { FlatList, Image, Modal, ScrollView, View } from 'react-native';
-import { Icon, Screen, Text } from '../../components';
+import { Screen, Text } from '../../components';
 import { RootStackParamList } from '../../types/rootStackParamList';
 import { iTypeSenseSearchParams } from '../../types/typesense.types';
 import { CategoryList, GroupList, ProductListItem, ViewProduct } from '../../widgets';
 import SearchHeader from '../../widgets/search-header/search-header.widget';
 import { Screen as ScreenType} from '../../types/screen.types';
 import styles from './store.style';
-import useTypeSense from '../../hooks/useTypeSense';
 import { iProduct } from '../../model/product.model';
 import { iStore } from '../../model/store.model';
 import useDataLoader, { iDataLoaderConfig } from '../../hooks/useDataLoader';
-import { iGroupListItem, iListItem } from '../../types/list.types';
-import { CATEGORY_ICON_MAPPING } from '../../constant/category-icons.constant';
-import { iCategory } from '../home/home-categories.component';
-import { TEXT, THEME } from '../../constant/color.constant';  
+import { iGroupListItem, iListItem } from '../../types/list.types'; 
+import { iCategory } from '../home/home-categories.component'; 
 
- 
+
 interface iProps {
     
 }

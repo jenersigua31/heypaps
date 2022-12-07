@@ -67,7 +67,9 @@ const GroupList:React.FC<iProps> = ({
                         style={styles.scroll}
                     >
                         { g.list.map(item => ( 
-                            renderListItem(item)
+                            <React.Fragment key={item.id}>
+                                {renderListItem(item)}
+                            </React.Fragment>
                         )) }
                     </ScrollView>
                 </View>
