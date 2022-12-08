@@ -3,10 +3,14 @@ import { Button, ScrollView, View} from 'react-native';
 import { Checkbox, Icon, Text } from '../../components';
 import Screen from '../../components/screen/screen.component';
 import { THEME } from '../../constant/color.constant';
+import { useAppContext } from '../../context/app.context';
 import { Header } from '../../widgets';
 import styles from './cart-screen.style';
 
 const CartScreen = () => {
+
+	const {} = useAppContext();
+
 	return (
 			<Screen>
 				<View style={styles.container}>

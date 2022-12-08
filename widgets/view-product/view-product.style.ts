@@ -39,12 +39,21 @@ const styles = StyleSheet.create({
         flex:1,
     },
     quantityValue: {
-        borderColor: THEME.main,
+        borderColor: THEME.light,
+        borderRadius:5,
         borderWidth:1,
         padding:5,
         paddingHorizontal:35,
         textAlign: 'center',
         marginHorizontal: 10
+    },
+    toCart: {
+        borderWidth:1,
+        borderColor: THEME.main,
+        borderRadius:5,
+        width:25,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 

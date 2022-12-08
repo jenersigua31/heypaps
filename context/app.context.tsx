@@ -12,14 +12,14 @@ interface iAppContext {
 	cart:{
 		[key: number]: iCartItem
 	},
-	addToCart: (p: iProduct) => void,
+	addToCart: (p: iProduct, quantity?: number) => void,
 	removeToCart: (p: iProduct) => void,
 	isInCart: (p: iProduct) => boolean,
 	getQuantity: (p: iProduct) => number
 }
 const AppContext = createContext<iAppContext>({ 
 	cart: {},
-	addToCart: (p: iProduct) => {},
+	addToCart: (p: iProduct, quantity?: number) => {},
 	removeToCart: (p: iProduct) => {},
 	isInCart: (p: iProduct) => false,
 	getQuantity: (p: iProduct) => 0
@@ -34,7 +34,7 @@ export const AppContextProvider = ({ children }: LoginProviderProps) => {
 		return !!cart[product.id] && cart[product.id].quantity > 0
 	}
 
-	const addToCart = (product: iProduct) => {
+	const addToCart = (product: iProduct, quantity?: number) => {
 		setCart(currentCart => {
 			const isAlreadyInCart = isInCart(product);
 
@@ -43,7 +43,7 @@ export const AppContextProvider = ({ children }: LoginProviderProps) => {
 					...currentCart,
 					[product.id]: {
 						product,
-						quantity:1
+						quantity: !quantity ? 1: quantity
 					}
 				}
 			}
@@ -52,7 +52,7 @@ export const AppContextProvider = ({ children }: LoginProviderProps) => {
 				...currentCart,
 				[product.id]: {
 					product,
-					quantity: currentCart[product.id].quantity + 1
+					quantity: quantity ? quantity : (currentCart[product.id].quantity + 1)
 				}
 			}  
 		})

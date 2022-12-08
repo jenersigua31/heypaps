@@ -1,7 +1,8 @@
-import React from 'react';
-import { Button, Pressable, SafeAreaView, View, Image } from 'react-native';
+import React, { useState } from 'react';
+import { Button, Pressable, SafeAreaView, View, Image, TouchableOpacity } from 'react-native'; 
 import { Icon, InputField, Screen, Text } from '../../components';
 import { THEME } from '../../constant/color.constant';
+import { useAppContext } from '../../context/app.context';
 import { iProduct } from '../../model/product.model';
 import styles from './view-product.style';
 
@@ -15,39 +16,65 @@ const ViewProduct:React.FC<iProps> = ({
     product,
     onClose
 }) => {
-  return (
-        <SafeAreaView> 
-            <View style={styles.container}>
-                <Pressable onPress={onClose}>
-                    <Icon name="close" size={30} style={styles.close}/>
-                </Pressable>
+    
+    const { addToCart, isInCart, getQuantity } = useAppContext();
 
-                <View style={styles.imageContainer}>
-                    <Image 
-                        style={styles.image}
-                        source={{uri: product.image}}
-                    />
-                </View>
+    const [quantity, setQuantity] = useState( isInCart(product) ?  getQuantity(product) : 1);
 
-                <View style={styles.info}>
-                    <Text text={product.description} fontSize={20} bold style={styles.infoTitle}/>
-                    <Text text={product.measurement} />
-                    <Text text={'₱ '+product.price} bold/>
-                    <Text text='The quick brown fox jumps over the lazy dog.The quick brown fox jumps over the lazy dog.The quick brown fox jumps over the lazy dog.' numberOfLines={3}/>
-                </View>
 
-                <View style={styles.quantity}>
-                    <Text text='Quantity' fontSize={18} bold style={styles.quantityLabel}/>
+    const updateQuantity = (action: '+' | '-') => {
+        setQuantity( current => {
+            const add = current + 1;
+            let minus = current - 1;
+            if(minus<1)minus = 1;
+            return action === '+' ? add : minus;            
+        })
+    }
 
-                    <Icon name="minus-circle-outline" size={25} color={THEME.main}/>    
-                    <Text text='1' fontSize={18} bold style={styles.quantityValue}/>
-                    <Icon name="plus-circle-outline" size={25} color={THEME.main}/>    
-                </View>
+    const toCart = () => {
+        addToCart(product, quantity);
+        onClose();
+    }
 
-                <Button title='Add to Cart'/>
-            </View> 
-        </SafeAreaView>
-  );
+    return (
+            <SafeAreaView> 
+                <View style={styles.container}>
+                    <Pressable onPress={onClose}>
+                        <Icon name="close" size={30} style={styles.close}/>
+                    </Pressable>
+
+                    <View style={styles.imageContainer}>
+                        <Image 
+                            style={styles.image}
+                            source={{uri: product.image}}
+                        />
+                    </View>
+
+                    <View style={styles.info}>
+                        <Text text={product.description} fontSize={20} bold style={styles.infoTitle}/>
+                        <Text text={product.measurement} />
+                        <Text text={'₱ '+product.price} bold/>
+                        <Text text='The quick brown fox jumps over the lazy dog.The quick brown fox jumps over the lazy dog.The quick brown fox jumps over the lazy dog.' numberOfLines={3}/>
+                    </View>
+
+                    <View style={styles.quantity}>
+                        <Text text='Quantity' fontSize={16} bold style={styles.quantityLabel}/>
+
+                        <TouchableOpacity onPress={() => updateQuantity('-')}> 
+                            <Icon name="minus" size={24} color={THEME.main} style={styles.toCart}/> 
+                        </TouchableOpacity>
+                           
+                        <Text text={quantity+''} fontSize={16} bold style={styles.quantityValue}/>
+
+                        <TouchableOpacity onPress={() => updateQuantity('+')}>
+                            <Icon name="plus" size={24} color={THEME.main} style={styles.toCart}/>    
+                        </TouchableOpacity>
+                    </View>
+
+                    <Button title={isInCart(product) ? 'Update Cart': 'Add to Cart'} onPress={toCart}/>
+                </View> 
+            </SafeAreaView>
+    );
 }
 
 
