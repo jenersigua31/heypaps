@@ -1,93 +1,61 @@
 
 import React, { createContext, useContext, useState } from "react";
 import { iProduct } from "../model/product.model";
+import { iStore } from "../model/store.model";
+import { iCartItem, useCart } from "./useCart";
 
-interface iCartItem {
-	// id: number,
-	product:iProduct,
-	quantity: number
-}
 
 interface iAppContext {
+	// CART
 	cart:{
 		[key: number]: iCartItem
 	},
-	addToCart: (p: iProduct, quantity?: number) => void,
+	addToCart: (p: iProduct, store: iStore, quantity?: number) => void,
 	removeToCart: (p: iProduct) => void,
 	isInCart: (p: iProduct) => boolean,
-	getQuantity: (p: iProduct) => number
+	getQuantity: (p: iProduct) => number,
+
+	// STORE
+	activeStore?: iStore,
+	setActiveStore: (s: iStore) => void
 }
 const AppContext = createContext<iAppContext>({ 
+	// CART
 	cart: {},
-	addToCart: (p: iProduct, quantity?: number) => {},
+	addToCart: (p: iProduct,store: iStore, quantity?: number) => {},
 	removeToCart: (p: iProduct) => {},
 	isInCart: (p: iProduct) => false,
-	getQuantity: (p: iProduct) => 0
+	getQuantity: (p: iProduct) => 0,
+
+	// STORE
+	setActiveStore: (s: iStore) => {},
 })
 interface LoginProviderProps{
 	children: React.ReactNode
 }
 export const AppContextProvider = ({ children }: LoginProviderProps) => {
-	const [cart, setCart] = useState<iCartItem[]>([]); 
+	const {
+		cart,
+		addToCart,
+		removeToCart,
+		isInCart,
+		getQuantity
+	} = useCart();
 
-	const isInCart = (product: iProduct) => {
-		return !!cart[product.id] && cart[product.id].quantity > 0
-	}
-
-	const addToCart = (product: iProduct, quantity?: number) => {
-		setCart(currentCart => {
-			const isAlreadyInCart = isInCart(product);
-
-			if(!isAlreadyInCart) {
-				return {
-					...currentCart,
-					[product.id]: {
-						product,
-						quantity: !quantity ? 1: quantity
-					}
-				}
-			}
-
-			return {
-				...currentCart,
-				[product.id]: {
-					product,
-					quantity: quantity ? quantity : (currentCart[product.id].quantity + 1)
-				}
-			}  
-		})
-	}
-
-	const removeToCart = (product: iProduct) => {
-		setCart(currentCart => {
-			const isAlreadyInCart = isInCart(product);
-
-			if(!isAlreadyInCart)return currentCart;
-
-			return {
-				...currentCart,
-				[product.id]: {
-					product,
-					quantity: currentCart[product.id].quantity - 1
-				}
-			} 
-		})
-	}
-
-	
-
-	const getQuantity = (p: iProduct) => {
-		if(!isInCart(p))return 0;
-		return cart[p.id].quantity
-	}
+	const [activeStore, setActiveStore] = useState<iStore | undefined>();
 
 	return (
 		<AppContext.Provider value={{ 
+			// CART
 			cart,
 			addToCart, 
 			removeToCart,
 			isInCart,
-			getQuantity
+			getQuantity,
+
+			// STORE
+			activeStore,
+			setActiveStore
 		}}>
 			{children}
 		</AppContext.Provider>

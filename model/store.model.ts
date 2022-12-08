@@ -1,5 +1,5 @@
 export interface iStore {
-    id: string,
+    id: number,
     name: string,
     image: string,
     store_in: string,

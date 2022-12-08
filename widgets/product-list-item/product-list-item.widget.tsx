@@ -18,12 +18,12 @@ const ProductListItem:React.FC<iProps> = ({
     onSelect
 }) => {
     const [quantity, setQuantity] = useState(0);
-    const { addToCart, removeToCart, isInCart, getQuantity } = useAppContext();
+    const { addToCart, removeToCart, isInCart, getQuantity, activeStore } = useAppContext();
 
 
     const toCart=(action: '+' | '-') => {
-        if(action==='+'){
-            addToCart(product);
+        if(action==='+' && activeStore){
+            addToCart(product, activeStore);
             return;
         }        
         removeToCart(product);

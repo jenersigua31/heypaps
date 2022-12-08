@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import { useAppContext } from '../../context/app.context';
 import { iStore } from '../../model/store.model';
 import { iListItem } from '../../types/list.types';
 import { Screen } from '../../types/screen.types';
@@ -16,9 +17,12 @@ const StoreList:React.FC<iProps> = ({
     data = []
 }) => {
     const { navigate } = useNavigation();
+    const { setActiveStore } = useAppContext();
  
     const onSelectHandler = (item: iListItem) => {
-        const selectedStore = data.find(s => s.id === item.id);
+        const selectedStore = data.find(s => s.id == item.id);
+        if(selectedStore)setActiveStore(selectedStore);
+
         navigate(Screen.Store as never, {
             ...selectedStore
         } as never)

@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { FlatList, View} from 'react-native'; 
-import { Spacer, Text } from '../../components';
-import { iProductThumbnail } from '../../types/product-thumbnail.interface';
+import { Spacer, Text } from '../../components'; 
 import ListItem from '../list-item/list-item.widget';
 import styles from './list.style';
 
 interface iListItem { 
-    id: string, 
+    id: number, 
     title: string[], 
     subTitle: string[],
     image?: string
@@ -16,8 +15,7 @@ interface iProps {
     id: string,
     data: iListItem[],
     column?: number,
-    image?: string,
-    listItemImageTemplate?: (data: iProductThumbnail) => JSX.Element,
+    image?: string, 
 
     onSelect?: (data: iListItem) => void
 }
@@ -26,8 +24,7 @@ const List:React.FC<iProps> = ({
     id,
     data,
     column = 1,
-    image,
-    listItemImageTemplate,
+    image, 
     onSelect
 }) => {
     const [loading, setLoading] = useState(false);
@@ -70,8 +67,7 @@ const List:React.FC<iProps> = ({
                         display={display()}
                         style={styles.store}
                         title={item.title}
-                        subTitle={item.subTitle}	
-                        imageTemplate={listItemImageTemplate}
+                        subTitle={item.subTitle}	 
                     />
                 )}
                 keyExtractor={(item) => item.id}

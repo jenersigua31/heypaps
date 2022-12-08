@@ -17,7 +17,7 @@ const ViewProduct:React.FC<iProps> = ({
     onClose
 }) => {
     
-    const { addToCart, isInCart, getQuantity } = useAppContext();
+    const { addToCart, isInCart, getQuantity, activeStore } = useAppContext();
 
     const [quantity, setQuantity] = useState( isInCart(product) ?  getQuantity(product) : 1);
 
@@ -32,7 +32,8 @@ const ViewProduct:React.FC<iProps> = ({
     }
 
     const toCart = () => {
-        addToCart(product, quantity);
+        if(!activeStore)return;
+        addToCart(product,activeStore, quantity);
         onClose();
     }
 

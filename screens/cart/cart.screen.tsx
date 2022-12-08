@@ -9,8 +9,8 @@ import styles from './cart-screen.style';
 
 const CartScreen = () => {
 
-	const {} = useAppContext();
-
+	const { cart } = useAppContext();
+	console.log(cart)
 	return (
 			<Screen>
 				<View style={styles.container}>
