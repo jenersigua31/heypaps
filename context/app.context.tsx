@@ -3,17 +3,26 @@ import React, { createContext, useContext, useState } from "react";
 import { iProduct } from "../model/product.model";
 
 interface iCartItem {
-	id: number,
+	// id: number,
 	product:iProduct,
 	quantity: number
 }
+
 interface iAppContext {
-	cart:iCartItem[],
-	addToCart: (p: iProduct) => void
+	cart:{
+		[key: number]: iCartItem
+	},
+	addToCart: (p: iProduct) => void,
+	removeToCart: (p: iProduct) => void,
+	isInCart: (p: iProduct) => boolean,
+	getQuantity: (p: iProduct) => number
 }
 const AppContext = createContext<iAppContext>({ 
-	cart: [],
-	addToCart: (p: iProduct) => {}
+	cart: {},
+	addToCart: (p: iProduct) => {},
+	removeToCart: (p: iProduct) => {},
+	isInCart: (p: iProduct) => false,
+	getQuantity: (p: iProduct) => 0
 })
 interface LoginProviderProps{
 	children: React.ReactNode
@@ -21,23 +30,67 @@ interface LoginProviderProps{
 export const AppContextProvider = ({ children }: LoginProviderProps) => {
 	const [cart, setCart] = useState<iCartItem[]>([]); 
 
+	const isInCart = (product: iProduct) => {
+		return !!cart[product.id] && cart[product.id].quantity > 0
+	}
+
 	const addToCart = (product: iProduct) => {
-		setCart(p => {
-			return [
-				...p,
-				{
-					id:product.id,
-					product: product,
-					quantity: 1
+		setCart(currentCart => {
+			const isAlreadyInCart = isInCart(product);
+
+			if(!isAlreadyInCart) {
+				return {
+					...currentCart,
+					[product.id]: {
+						product,
+						quantity:1
+					}
 				}
-			]
+			}
+
+			return {
+				...currentCart,
+				[product.id]: {
+					product,
+					quantity: currentCart[product.id].quantity + 1
+				}
+			}  
 		})
 	}
 
+	const removeToCart = (product: iProduct) => {
+		setCart(currentCart => {
+			const isAlreadyInCart = isInCart(product);
+
+			if(!isAlreadyInCart)return currentCart;
+
+			return {
+				...currentCart,
+				[product.id]: {
+					product,
+					quantity: currentCart[product.id].quantity - 1
+				}
+			} 
+		})
+	}
+
+	
+
+	const getQuantity = (p: iProduct) => {
+		if(!isInCart(p))return 0;
+		return cart[p.id].quantity
+	}
+
 	return (
-	  <AppContext.Provider value={{ cart,addToCart }}>
-		{children}
-	  </AppContext.Provider>
+		<AppContext.Provider value={{ 
+			cart,
+			addToCart, 
+			removeToCart,
+			isInCart,
+			getQuantity
+		}}>
+			{children}
+		</AppContext.Provider>
 	);
 };
 

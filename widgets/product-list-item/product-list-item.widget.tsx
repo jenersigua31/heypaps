@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 import { Icon, Text } from '../../components';
 import { TEXT, THEME } from '../../constant/color.constant';
+import { useAppContext } from '../../context/app.context';
 import { iProduct } from '../../model/product.model';
 import styles from './product-list-item.style';
 
@@ -17,13 +18,15 @@ const ProductListItem:React.FC<iProps> = ({
     onSelect
 }) => {
     const [quantity, setQuantity] = useState(0);
+    const { addToCart, removeToCart, isInCart, getQuantity } = useAppContext();
 
 
-    const addToCart=(action: '+' | '-') => {
-        setQuantity(p => {
-            if(action === '+')return p+1
-            return p-1;
-        });
+    const toCart=(action: '+' | '-') => {
+        if(action==='+'){
+            addToCart(product);
+            return;
+        }        
+        removeToCart(product);
     }
 
     const onSelectHandler = (p: iProduct) => {
@@ -61,15 +64,15 @@ const ProductListItem:React.FC<iProps> = ({
                     </TouchableOpacity>
 
                     {
-                        quantity > 0 &&
+                        isInCart(product) &&
                         <View style={styles.cart}>
-                            <TouchableOpacity style={[styles.icon, modifier().icon]}  onPress={()=>addToCart('-')}>
+                            <TouchableOpacity style={[styles.icon, modifier().icon]}  onPress={()=>toCart('-')}>
                                 <Icon name="minus" color={THEME.main} size={12}/>   
                             </TouchableOpacity>
                             
-                            <Text text={quantity+''} bold color={TEXT.dark} fontSize={modifier().infoTextSize}/> 
+                            <Text text={getQuantity(product)+''} bold color={TEXT.dark} fontSize={modifier().infoTextSize}/> 
 
-                            <TouchableOpacity style={[styles.icon, modifier().icon]}  onPress={()=>addToCart('+')}>
+                            <TouchableOpacity style={[styles.icon, modifier().icon]}  onPress={()=>toCart('+')}>
                                 <Icon name="plus" color={THEME.main} size={12}/>   
                             </TouchableOpacity> 
                         </View>
@@ -77,9 +80,9 @@ const ProductListItem:React.FC<iProps> = ({
                     
 
                     {
-                        quantity == 0 &&
+                        !isInCart(product) &&
                         <View style={[styles.cart, {justifyContent: 'center'}]}>
-                            <TouchableOpacity style={styles.cartAdd} onPress={()=>addToCart('+')}>
+                            <TouchableOpacity style={styles.cartAdd} onPress={()=>toCart('+')}>
                                 <Text text='ADD' color={TEXT.dark} fontSize={modifier().infoTextSize - 2}/>  
                             </TouchableOpacity>
                         </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ViewStyle} from 'react-native';
+import { Image, Text, View, ViewStyle} from 'react-native';
 import styles from './carousel.style';
 
 
@@ -21,9 +21,12 @@ const Carousel:React.FC<iProps> = ({
     )
 
     return (
-            <View style={[styles.container, inlineStyles()]}>
-                <Text>Carousel</Text>
-            </View>
+        <View style={[styles.container, inlineStyles()]}>
+            <Image
+                source={{uri:"https://heypaps.blob.core.windows.net/carousel/slider.png"}}
+                style = {{ width: '100%', height: '100%' }}
+            />
+        </View>
     );
 }
 

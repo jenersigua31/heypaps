@@ -5,10 +5,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         flexDirection: 'row',
         paddingHorizontal: 20, 
-        borderRadius:7,
+        borderRadius:5,
         overflow: 'hidden',
         alignItems: 'center',
-        height: 50,
+        height: 45,
         elevation: 3,
     },
     input: {
