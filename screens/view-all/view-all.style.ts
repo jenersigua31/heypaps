@@ -4,10 +4,12 @@ import { BACKGROUND, THEME } from '../../constant/color.constant';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:'red'
     },
     title: {
-        paddingHorizontal:10,
-        marginBottom: 10
+        paddingHorizontal:20,
+        paddingVertical: 10,
+        backgroundColor: THEME.lightest
     },
     list: { 
         backgroundColor: BACKGROUND.light,

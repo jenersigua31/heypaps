@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { THEME } from '../../constant/color.constant';
 
 const styles = StyleSheet.create({
     container: {
@@ -6,7 +7,9 @@ const styles = StyleSheet.create({
         flex:1
     },
     title: {
-        paddingHorizontal:10
+        paddingHorizontal:20,
+        paddingVertical: 10,
+        backgroundColor: THEME.lightest
     },
     search: {
         paddingHorizontal: 50,

@@ -67,7 +67,15 @@ const ViewAllScreen = ({ route, navigation }: Props) => {
         <Screen>
             <View style={styles.container}>
               <SearchHeader onSearch={setSearchKey}/>
-              <Text text={route.params.title} fontSize={28} style={styles.title} bold color={TEXT.dark}/> 
+              <Text 
+                text={route.params.title} 
+                fontSize={16} 
+                style={styles.title} 
+                bold 
+                color={TEXT.dark}
+                icon="chevron-down"
+              /> 
+
               {
                 list &&
                 <View style={styles.list}> 

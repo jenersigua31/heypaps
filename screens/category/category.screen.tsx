@@ -75,7 +75,14 @@ const CagtegoryScreen = ({ route, navigation }: Props) => {
 				<View style={styles.search}>
 					<InputField placeholder='Search' icon="magnify" onChange={setSearchKey}/>
 				</View>  
-				<Text text={title} fontSize={28} style={styles.title} bold/>
+				<Text 
+					text={title}
+					fontSize={16} 
+					style={styles.title} 
+					bold 
+					color={TEXT.dark}
+					icon="chevron-down"
+				/> 
 				{
 					!!list && 
 					<FlatList
