@@ -12,6 +12,7 @@ import { iProduct } from '../../model/product.model';
 import { iListItem } from '../../types/list.types';
 import { List, ListView, ProductListItem, ViewProduct } from '../../widgets'; 
 import { TEXT } from '../../constant/color.constant';
+import { useAppContext } from '../../context/app.context';
 
 type Props = NativeStackScreenProps<RootStackParamList, ScreenType.ViewAll>;
 
@@ -35,23 +36,19 @@ const apiConfig: iDataLoaderConfig<iProduct, iListItem, any> = {
 
 const ViewAllScreen = ({ route, navigation }: Props) => {
 
-  const [loading, setLoading] = useState(false);
+  const { activeStore } = useAppContext();
   const { load, list, facets } = useDataLoader(apiConfig); 
   const [searchKey, setSearchKey] = useState<any>('');
   const [selectedProduct, setSelectedProduct] = useState<iProduct>();
 
   useEffect(() => { 
-      const filter = [`category:=${route.params.title}`];
+      const filter = [
+        `category:=${route.params.title}`,
+        `store_id:=${activeStore?.id}`
+      ];
       if(!!searchKey.length)filter.push(`description:${searchKey}`);
       load(filter)
   }, [searchKey])
-
-  const mapItem = (item: any) => ({
-    id: item.id,
-    title: [item.description],
-    subTitle: [ `₱ ${item.price}` ],
-    image: item.image
-  });
 
   const onCloseHandler = () => {
       setSelectedProduct(undefined)

@@ -55,7 +55,7 @@ const ViewProduct:React.FC<iProps> = ({
                         <Text text={product.description} fontSize={20} bold style={styles.infoTitle}/>
                         <Text text={product.measurement} />
                         <Text text={'₱ '+product.price} bold/>
-                        <Text text='The quick brown fox jumps over the lazy dog.The quick brown fox jumps over the lazy dog.The quick brown fox jumps over the lazy dog.' numberOfLines={3}/>
+                        <Text text={product.content} numberOfLines={3}/>
                     </View>
 
                     <View style={styles.quantity}>

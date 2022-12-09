@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: Dimensions.get('window').width - 42,
         height: Dimensions.get('window').width - 42,
-        backgroundColor: '#eee',
+        backgroundColor: '#fff',
         alignSelf: 'center',
         marginBottom: 10,
         padding: 20

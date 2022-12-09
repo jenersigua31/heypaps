@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, View} from 'react-native'; 
-import { Spacer, Text } from '../../components';
-import { iProductThumbnail } from '../../types/product-thumbnail.interface';
-import ListItem from '../list-item/list-item.widget';
+import { Spacer, Text } from '../../components'; 
 import styles from './list-view.style';
 
 interface iProps {
