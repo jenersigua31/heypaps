@@ -31,17 +31,17 @@ const styles = StyleSheet.create({
     itemProductInfo: {
         flexDirection: 'row',
         padding: 10,
-        paddingLeft: 42,
+        // paddingLeft: 42,
     },
     itemProductImage: {
         width: 40,
         height: 40,
-        backgroundColor: '#ddd',
-        marginRight: 10
+        marginRight: 10,
+        resizeMode: 'contain'
     },
     fees: {
         padding: 10,
-        paddingLeft: 42,
+        // paddingLeft: 42,
         borderTopColor: BACKGROUND.light,
         borderTopWidth: 1
     },

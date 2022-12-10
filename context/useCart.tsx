@@ -3,11 +3,17 @@ import { iProduct } from "../model/product.model";
 import { iStore } from "../model/store.model";
 
 export interface iCartItem {
-	// id: number,
 	product:iProduct,
 	quantity: number,
     store: iStore
 }
+
+// export interface iCartStoreGroup {
+// 	[key: number]: {
+// 		store: iStore,
+// 		items: iCartItem[]
+// 	}
+// }
 
 export const useCart = () => {
     const [cart, setCart] = useState<iCartItem[]>([]); 
@@ -62,11 +68,56 @@ export const useCart = () => {
 		return cart[p.id].quantity
 	}
 
+	const getStoresOnCart = () => {
+		const storeIds: number[] = [];
+		const stores: iStore[] = [];
+		const productIds = Object.keys(cart);
+		productIds.forEach((id:string) => {
+			const cartItem = cart[+id] as iCartItem;
+			const store = cartItem.store;			
+			if(!storeIds.includes(store.id)){
+				stores.push(store);
+				storeIds.push(store.id);
+			}
+		});
+		return stores;
+	}
+
+	const getCartItemsByStore = (storeId: number) => {
+		const productIds = Object.keys(cart);
+		const cartItems: iCartItem[] = [];
+
+		productIds.forEach( (id:string) => {
+			const cartItem = cart[+id];
+			if(
+				storeId === cartItem.store.id &&
+				cartItem.quantity > 0
+			){
+				cartItems.push(cartItem);
+			}
+		});
+
+		return cartItems;
+	}
+
+	const getCartTotalPrice = () => {
+		const productIds = Object.keys(cart);
+		let total = 0;
+		productIds.forEach( (id:string) => {
+			const cartItem = cart[+id];
+			total += (cartItem.quantity * cartItem.product.price);
+		});
+		return total;
+	}
+
     return {
         cart,
         isInCart,
         addToCart,
         removeToCart,
-        getQuantity
+        getQuantity,
+		getStoresOnCart,
+		getCartItemsByStore,
+		getCartTotalPrice
     }
 }
