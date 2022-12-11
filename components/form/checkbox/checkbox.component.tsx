@@ -1,17 +1,19 @@
 import React from 'react';
-import { View, ViewStyle } from 'react-native'; 
+import { TouchableOpacity, View, ViewStyle } from 'react-native'; 
 import Icon from '../../icon/icon.component';
 import styles from './checkbox.style';
 
 
 interface iProps {
     checked?: boolean,
-    style?: ViewStyle
+    style?: ViewStyle,
+    onClick: (checked: boolean) => void
 }
 
 const Checkbox:React.FC<iProps> = ({
-    checked = true,
-    style = {}
+    checked = false,
+    style = {},
+    onClick
 }) => {
 
     const icon = () => {
@@ -20,9 +22,11 @@ const Checkbox:React.FC<iProps> = ({
 
 
     return (
-            <View style={[styles.container, style]}> 
+            <TouchableOpacity style={[styles.container, style]} onPress={() => {
+                onClick(!checked)
+            }}> 
                 <Icon name={icon()} size={25}/>
-            </View>
+            </TouchableOpacity>
     );
 }
 

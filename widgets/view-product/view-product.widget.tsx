@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Pressable, SafeAreaView, View, Image, TouchableOpacity } from 'react-native'; 
-import { Icon, InputField, Screen, Text } from '../../components';
+import { Currency, Icon, InputField, Screen, Text } from '../../components';
 import { THEME } from '../../constant/color.constant';
 import { useAppContext } from '../../context/app.context';
 import { iProduct } from '../../model/product.model';
@@ -53,8 +53,11 @@ const ViewProduct:React.FC<iProps> = ({
 
                     <View style={styles.info}>
                         <Text text={product.description} fontSize={20} bold style={styles.infoTitle}/>
-                        <Text text={product.measurement} />
-                        <Text text={'₱ '+product.price} bold/>
+                        <Text text={product.measurement} /> 
+                        <Currency
+                            amount={product.price}
+                            bold
+                        />
                         <Text text={product.content} numberOfLines={3}/>
                     </View>
 

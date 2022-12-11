@@ -8,15 +8,12 @@ export interface iCartItem {
     store: iStore
 }
 
-// export interface iCartStoreGroup {
-// 	[key: number]: {
-// 		store: iStore,
-// 		items: iCartItem[]
-// 	}
-// }
+export interface iCartStoreGroup {
+	[key: number]: iCartItem
+}
 
 export const useCart = () => {
-    const [cart, setCart] = useState<iCartItem[]>([]); 
+    const [cart, setCart] = useState<iCartStoreGroup>({}); 
 
 	const isInCart = (product: iProduct) => {
 		return !!cart[product.id] && cart[product.id].quantity > 0
@@ -100,14 +97,24 @@ export const useCart = () => {
 		return cartItems;
 	}
 
-	const getCartTotalPrice = () => {
+	const getCartTotalPrice = (excludedStores?: number[]) => {
 		const productIds = Object.keys(cart);
 		let total = 0;
 		productIds.forEach( (id:string) => {
-			const cartItem = cart[+id];
-			total += (cartItem.quantity * cartItem.product.price);
+			const cartItem = cart[+id];			
+			const isExluded = (excludedStores || []).includes(cartItem.store.id);
+			if(!isExluded){
+				total += (cartItem.quantity * cartItem.product.price);
+			}
 		});
 		return total;
+	}
+
+	const deleteCartItem = (productId: number) => { 
+		console.log(cart)
+		const currentCart = {...cart};
+		delete currentCart[productId];  
+		setCart(currentCart)
 	}
 
     return {
@@ -118,6 +125,7 @@ export const useCart = () => {
         getQuantity,
 		getStoresOnCart,
 		getCartItemsByStore,
-		getCartTotalPrice
+		getCartTotalPrice,
+		deleteCartItem
     }
 }

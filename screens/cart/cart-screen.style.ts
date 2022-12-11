@@ -17,28 +17,7 @@ const styles = StyleSheet.create({
         padding:10,
         borderColor: BACKGROUND.light,
         borderWidth: 1
-    },
-    itemProducts: {
-        borderTopColor: BACKGROUND.light,
-        borderTopWidth: 1
-    },
-    itemProduct: {
-
-    },
-    itemProductName: {
-        flex: 1
-    },
-    itemProductInfo: {
-        flexDirection: 'row',
-        padding: 10,
-        // paddingLeft: 42,
-    },
-    itemProductImage: {
-        width: 40,
-        height: 40,
-        marginRight: 10,
-        resizeMode: 'contain'
-    },
+    },  
     fees: {
         padding: 10,
         // paddingLeft: 42,
@@ -57,24 +36,24 @@ const styles = StyleSheet.create({
         padding: 10,
         borderTopColor: BACKGROUND.light,
         borderTopWidth:1
+    }, 
+    products: {
+        position: 'relative'
     },
-
-
-    quantity: {
-        marginLeft: 'auto',
-        flexDirection: 'row',
+    cover: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#fff',
+        opacity:0.85
+    },
+    cartEmpty: { 
+        height: '100%',
+        width: '100%',
         alignItems: 'center',
-        padding: 10
-    },
-    quantityValue: {
-        borderColor: BACKGROUND.light,
-        borderWidth: 1,
-        padding: 3,
-        paddingHorizontal: 20,
-        marginHorizontal: 10
-    },
-    removeProduct: {
-        marginRight: 10
+        justifyContent: 'center'
     }
 });
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
-import { Icon, Text } from '../../components';
+import { Currency, Icon, Text } from '../../components';
 import { TEXT, THEME } from '../../constant/color.constant';
 import { useAppContext } from '../../context/app.context';
 import { iProduct } from '../../model/product.model';
@@ -60,7 +60,12 @@ const ProductListItem:React.FC<iProps> = ({
                     
                     <TouchableOpacity style={styles.details} onPress={() => onSelectHandler(product)}>
                         <Text text={product.description} fontSize={modifier().infoTextSize} bold color={TEXT.dark} numberOfLines={modifier().numberOfLines}/>
-                        <Text text={`₱ ${product.price}`} fontSize={modifier().infoTextSize} bold color={TEXT.normal}/>
+                        <Currency 
+                            amount={product.price}
+                            size={modifier().infoTextSize} 
+                            bold 
+                            color={TEXT.normal}
+                        />
                     </TouchableOpacity>
 
                     {

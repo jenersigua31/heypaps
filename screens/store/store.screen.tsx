@@ -64,11 +64,7 @@ const StoreScreen = ({ route, navigation }: Props) => {
 		const filter = [`store_id:=${route.params.id}`];
         if(!!searchKey.length)filter.push(`description:${searchKey}`);
 		load(filter)
-	}, [searchKey])
-    
-    useEffect(() => {  
-        console.log(facets)
-	}, [facets])
+	}, [searchKey]);
 
     const onCloseHandler = () => {
         setSelectedProduct(undefined)

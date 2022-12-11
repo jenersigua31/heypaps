@@ -4,6 +4,7 @@ import Text from './text/text.component';
 import InputField from './form/input-field/input-field.component';
 import Checkbox from './form/checkbox/checkbox.component';
 import Spacer from './spacer/spacer.component';
+import Currency from './currency/currency.component';
 
 export {
     Icon,
@@ -11,5 +12,6 @@ export {
     Checkbox,
     InputField,
     Text,
-    Spacer
+    Spacer,
+    Currency
 }
