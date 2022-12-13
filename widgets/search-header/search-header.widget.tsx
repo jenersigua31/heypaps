@@ -33,7 +33,7 @@ const SearchHeader:React.FC<iProps> = ({
             <InputField placeholder='Search' icon='magnify' style={styles.input} onChange={onSearchHandler}/>
             
             <TouchableOpacity onPress={gotoCart}>
-              <Icon name='cart-variant' size={30}/>
+              <Icon name='cart-outline' size={25}/>
             </TouchableOpacity>
         </View>
   );

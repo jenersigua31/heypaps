@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { BACKGROUND } from '../../../../constant/color.constant';
+import { BACKGROUND, THEME } from '../../../../constant/color.constant';
 
 const styles = StyleSheet.create({
     container: {
@@ -30,14 +30,23 @@ const styles = StyleSheet.create({
         padding: 10
     },
     quantityValue: {
-        borderColor: BACKGROUND.light,
+        borderColor: THEME.light,
         borderWidth: 1,
         padding: 3,
-        paddingHorizontal: 20,
-        marginHorizontal: 10
+        paddingHorizontal: 18,
+        marginHorizontal: 10,
+        borderRadius: 3
     },
     removeProduct: {
         marginRight: 10
+    },
+    updateQuantity: {
+        borderWidth:1,
+        borderColor: THEME.main,
+        borderRadius:3
+    },
+    updateQuantityDisabled: {
+        opacity:.3
     }
 });
 

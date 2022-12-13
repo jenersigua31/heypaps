@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, View, ViewStyle } from 'react-native'; 
+import { THEME } from '../../../constant/color.constant';
 import Icon from '../../icon/icon.component';
 import styles from './checkbox.style';
 
@@ -17,7 +18,7 @@ const Checkbox:React.FC<iProps> = ({
 }) => {
 
     const icon = () => {
-        return !checked ? 'checkbox-blank-outline' : 'checkbox-outline';
+        return !checked ? 'checkbox-blank-outline' : 'checkbox-marked';
     }
 
 
@@ -25,7 +26,7 @@ const Checkbox:React.FC<iProps> = ({
             <TouchableOpacity style={[styles.container, style]} onPress={() => {
                 onClick(!checked)
             }}> 
-                <Icon name={icon()} size={25}/>
+                <Icon name={icon()} size={25} color={THEME.main}/>
             </TouchableOpacity>
     );
 }

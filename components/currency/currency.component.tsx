@@ -8,7 +8,9 @@ interface iProps {
 
     bold?: boolean,
     color?: string,
-    size?: number
+    size?: number,
+
+    style?: any
 }
 
 const Currency:React.FC<iProps> = ({
@@ -16,12 +18,13 @@ const Currency:React.FC<iProps> = ({
     amount,
     bold = false,
     color,
-    size
+    size,
+    style
 }) => {
 
-    const value = () => {
-        const amountString = amount+'';
-        if(amountString.length< 4)return `${sign} ${amount}.00`;
+    const value = (price: number) => {
+        const amountString = price+'';
+        if(amountString.length< 4)return `${sign} ${price}.00`;
 
         const amountArray = amountString.split('').reverse();
         const amountArrayWithComma = amountArray.map( (digit,index) => {
@@ -34,10 +37,11 @@ const Currency:React.FC<iProps> = ({
 
     return ( 
             <Text 
-                text={value()} 
+                text={value(amount)} 
                 bold={bold}
                 color={color}
                 fontSize={size}
+                style={style}
             /> 
     );
 }

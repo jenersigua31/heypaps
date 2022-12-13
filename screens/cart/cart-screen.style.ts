@@ -15,8 +15,7 @@ const styles = StyleSheet.create({
     itemStore: {
         flexDirection: 'row',
         padding:10,
-        borderColor: BACKGROUND.light,
-        borderWidth: 1
+        backgroundColor: THEME.lightest
     },  
     fees: {
         padding: 10,
@@ -54,6 +53,9 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    storePrice: {
+        marginLeft: 'auto'
     }
 });
 

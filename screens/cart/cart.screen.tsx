@@ -16,7 +16,9 @@ const CartScreen = () => {
 		cart, 
 		getStoresOnCart,
 		getCartItemsByStore,
-		getCartTotalPrice
+		getCartTotalPrice,
+		getStoreTotalPrice,
+		clearCart
 	} = useAppContext();
 
 	const isExluded = (id: number) => {
@@ -41,8 +43,11 @@ const CartScreen = () => {
 			<Screen>
 				<View style={styles.container}>
 					<Header 
-						buttonRight={{icon: 'trash-can-outline'}}
+						buttonRight={{icon: 'trash-can-outline', action: 'CLEAR_CART'}}
 						title="Cart"
+						buttonActionEvent={(action?: string) => {
+							clearCart()
+						}}
 					/>
 
 					{
@@ -59,7 +64,14 @@ const CartScreen = () => {
 														toggleExcludeStore(checked, store.id)
 													}}
 												/>
-												<Text  text={store.name} bold fontSize={18}/>
+												<Text text={store.name} bold fontSize={14}/>
+
+												<Currency
+													style={styles.storePrice}
+													amount={getStoreTotalPrice(store.id)}
+													bold 
+													size={14}
+												/>
 											</View>
 
 											<View style={styles.products}>
@@ -93,7 +105,7 @@ const CartScreen = () => {
 								<Currency
 									amount={getCartTotalPrice(excludedStores)}
 									bold 
-									size={20}
+									size={18}
 								/>
 								<Button title='CHECKOUT'/>
 							</View>

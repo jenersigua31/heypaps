@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, TouchableOpacity } from 'react-native'; 
 import { Currency, Icon, Text } from '../../../../components';
-import { THEME } from '../../../../constant/color.constant';
+import { TEXT, THEME } from '../../../../constant/color.constant';
 import { useAppContext } from '../../../../context/app.context';
 import { iProduct } from '../../../../model/product.model';
 import { iStore } from '../../../../model/store.model';
@@ -47,27 +47,32 @@ const CartProductComponent:React.FC<iProps> = ({
                 <Text style={styles.itemProductName} text={product.description} /> 
                 <Currency
                     amount={product.price}
-                    bold
+                    
+                    size={14}
                 />
             </View>
             <View style={styles.quantity}> 
                 
                 <TouchableOpacity onPress={removeItem}>
-                    <Icon name={'trash-can-outline'} size={25} style={styles.removeProduct}/>
+                    <Icon name={'trash-can'} size={20} style={styles.removeProduct} color={TEXT.normal}/>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={()=>updateCart('-')}>
-                    <Icon name='minus-circle-outline' size={25} color={ 
-                        !isDisableMinusQuantity() ? 
-                        THEME.main : 
-                        THEME.light 
-                    }/>    
+                    <Icon 
+                        style={{
+                            ...styles.updateQuantity,
+                            ...(
+                                isDisableMinusQuantity() ? 
+                                styles.updateQuantityDisabled : {}
+                            )
+                        }}
+                        name='minus' size={20} color={THEME.main}/>    
                 </TouchableOpacity> 
 
-                <Text text={quantity+''} fontSize={15} bold style={styles.quantityValue}/>
+                <Text text={quantity+''} fontSize={14} bold style={styles.quantityValue}/>
                 
                 <TouchableOpacity onPress={()=>updateCart('+')}>
-                    <Icon name="plus-circle-outline" size={25} color={THEME.main}/> 
+                    <Icon name="plus" size={20} color={THEME.main} style={styles.updateQuantity}/> 
                 </TouchableOpacity> 
 
             </View>

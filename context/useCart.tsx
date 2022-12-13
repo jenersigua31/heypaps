@@ -117,6 +117,18 @@ export const useCart = () => {
 		setCart(currentCart)
 	}
 
+	const getStoreTotalPrice = (storeId: number): number => {
+		const list = Object.keys(cart).map( key => cart[+key]);
+		const storeItems = list.filter( item => item.store.id === storeId);
+		return storeItems.reduce( (acc, b) => {
+			return (b.quantity * b.product.price) + acc;
+		}, 0)
+	}
+
+	const clearCart = () => {
+		setCart({})
+	}
+
     return {
         cart,
         isInCart,
@@ -126,6 +138,8 @@ export const useCart = () => {
 		getStoresOnCart,
 		getCartItemsByStore,
 		getCartTotalPrice,
-		deleteCartItem
+		deleteCartItem,
+		getStoreTotalPrice,
+		clearCart
     }
 }

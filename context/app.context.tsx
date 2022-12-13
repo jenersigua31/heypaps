@@ -18,6 +18,8 @@ interface iAppContext {
 	getCartItemsByStore: (storeId: number) => iCartItem[],
 	getCartTotalPrice: (excludedStores?: number[]) => number,
 	deleteCartItem:(productId: number) => void,
+	getStoreTotalPrice:(storeId: number) => number,
+	clearCart:() => void,
 
 	// STORE
 	activeStore?: iStore,
@@ -34,6 +36,8 @@ const AppContext = createContext<iAppContext>({
 	getCartItemsByStore: () => [],
 	getCartTotalPrice: (excludedStores?: number[]) => 0,
 	deleteCartItem: (productId: number) => {},
+	getStoreTotalPrice:(storeId: number) => 0,
+	clearCart:() => {},
 
 	// STORE
 	setActiveStore: (s: iStore) => {},
@@ -51,7 +55,9 @@ export const AppContextProvider = ({ children }: LoginProviderProps) => {
 		getStoresOnCart,
 		getCartItemsByStore,
 		getCartTotalPrice,
-		deleteCartItem
+		deleteCartItem,
+		getStoreTotalPrice,
+		clearCart
 	} = useCart();
 
 	const [activeStore, setActiveStore] = useState<iStore | undefined>();
@@ -68,6 +74,8 @@ export const AppContextProvider = ({ children }: LoginProviderProps) => {
 			getCartItemsByStore,
 			getCartTotalPrice,
 			deleteCartItem,
+			getStoreTotalPrice,
+			clearCart,
 			
 			// STORE
 			activeStore,

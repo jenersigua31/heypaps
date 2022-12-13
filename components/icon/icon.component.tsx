@@ -1,6 +1,6 @@
 import React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { View } from 'react-native';
+import { View, ViewStyle} from 'react-native';
 import styles from './icon.style';
 
 
@@ -8,7 +8,7 @@ interface iProps {
     name: string,
     size?: number,
     color?: string,
-    style?: any
+    style?: ViewStyle
 }
 
 const Icon:React.FC<iProps> = ({
